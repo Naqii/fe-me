@@ -17,7 +17,6 @@ const Img = () => {
     isRefetchingImage,
     refetchImages,
 
-    selectedId,
     setSelectedId,
   } = useImage();
 
@@ -31,6 +30,7 @@ const Img = () => {
       refetchImages();
       setSelectedId("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady]);
 
   const renderCell = useCallback(
