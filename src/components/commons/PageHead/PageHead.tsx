@@ -13,7 +13,7 @@ const PageHead = (props: PropTypes) => {
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>{title}</title>
-      <link rel="icon" href="/images/illustration/logo.webp" />
+      <link rel="icon" href="/images/general/2.jpg" />
     </Head>
   );
 };
