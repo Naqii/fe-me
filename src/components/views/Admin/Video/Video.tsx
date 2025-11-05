@@ -2,11 +2,12 @@ import DropDownAction from "@/components/commons/DropDownAction";
 import DataTable from "@/components/ui/DataTable";
 import useChangeUrl from "@/hooks/useChangeUrl";
 import { Chip, useDisclosure } from "@heroui/react";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { Key, ReactNode, useCallback, useEffect } from "react";
 import { COLUMN_LISTS_VIDEO } from "./Video.constant";
 import useVideo from "@/hooks/video/useVideo";
+import AddVideoModal from "./AddVideoModal";
+import DeleteVideoModal from "./DeleteVideoModal";
 
 const Video = () => {
   const { push, isReady, query } = useRouter();
@@ -16,6 +17,7 @@ const Video = () => {
     isRefetchingVideo,
     refetchVideos,
 
+    selectedId,
     setSelectedId,
   } = useVideo();
 
@@ -37,16 +39,6 @@ const Video = () => {
       const cellValue = video[columnKey as keyof typeof video];
 
       switch (columnKey) {
-        case "thumbnail":
-          return (
-            <Image
-              src={`${cellValue}`}
-              alt="image"
-              width={300}
-              height={200}
-              className="rounded-lg"
-            />
-          );
         case "isShow":
           return (
             <Chip
@@ -88,13 +80,13 @@ const Video = () => {
           totalPages={dataVideo?.pagination.totalPages}
         />
       )}
-      {/* <AddImageModal {...addImageModal} refetchImages={refetchImages} />
-      <DeleteImageModal
-        {...deleteImageModal}
+      <AddVideoModal {...addVideoModal} refetchVideos={refetchVideos} />
+      <DeleteVideoModal
+        {...deleteVideoModal}
         selectedId={selectedId}
         setSelectedId={setSelectedId}
-        refetchImages={refetchImages}
-      /> */}
+        refetchVideo={refetchVideos}
+      />
     </section>
   );
 };

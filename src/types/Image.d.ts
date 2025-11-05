@@ -1,8 +1,8 @@
 interface IImage {
   _id?: string;
   title?: string;
-  image?: string | FileList;
   isShow?: boolean | string;
+  image?: string | FileList;
 }
 
 export type { IImage };

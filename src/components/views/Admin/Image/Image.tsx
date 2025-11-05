@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { Key, ReactNode, useCallback, useEffect } from "react";
 import { COLUMN_LISTS_IMAGE } from "./Image.constant";
 import AddImageModal from "./AddImageModal";
+import DeleteImageModal from "./DeleteImageModal";
 
 const Img = () => {
   const { push, isReady, query } = useRouter();
@@ -17,6 +18,7 @@ const Img = () => {
     isRefetchingImage,
     refetchImages,
 
+    selectedId,
     setSelectedId,
   } = useImage();
 
@@ -91,12 +93,12 @@ const Img = () => {
         />
       )}
       <AddImageModal {...addImageModal} refetchImages={refetchImages} />
-      {/* <DeleteImageModal
+      <DeleteImageModal
         {...deleteImageModal}
         selectedId={selectedId}
         setSelectedId={setSelectedId}
-        refetchImages={refetchImages}
-      /> */}
+        refetchImage={refetchImages}
+      />
     </section>
   );
 };

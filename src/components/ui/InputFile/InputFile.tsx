@@ -100,12 +100,12 @@ const InputFile = (props: PropTypes) => {
               isIconOnly
               onPress={onDelete}
               disabled={isDeleting}
-              className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded bg-danger-100"
+              className="bg-danger-100 absolute top-2 right-2 flex h-9 w-9 items-center justify-center rounded"
             >
               {isDeleting ? (
                 <Spinner size="sm" color="danger" />
               ) : (
-                <CiTrash className="h-5 w-5 text-danger-500" />
+                <CiTrash className="text-danger-500 h-5 w-5" />
               )}
             </Button>
           </div>
@@ -115,7 +115,7 @@ const InputFile = (props: PropTypes) => {
             <CiSaveUp2 className="mb-2 h-10 w-10 text-gray-400" />
             <p className="text-center text-sm font-semibold text-gray-500">
               {isDropable
-                ? "Drag and drop or click to upload file here"
+                ? "Drag and drop or click to upload file here max size 100MB"
                 : "Click to upload file here"}
             </p>
           </div>
@@ -140,7 +140,7 @@ const InputFile = (props: PropTypes) => {
         />
       </label>
       {isInvalid && (
-        <p className="p-1 text-xs text-danger-500">{errorMessage}</p>
+        <p className="text-danger-500 p-1 text-xs">{errorMessage}</p>
       )}
     </div>
   );
