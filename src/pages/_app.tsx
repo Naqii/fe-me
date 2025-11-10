@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
+import { ThemeProvider } from "next-themes";
 
 type AppPropsWithSession = AppProps & {
   pageProps: {
@@ -28,15 +29,22 @@ export default function App({
 }: AppPropsWithSession) {
   return (
     <SessionProvider session={session}>
-      <HeroUIProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange={false}
+      >
         <QueryClientProvider client={queryClient}>
-          <ToasterProvider>
-            <AppShell>
-              <Component {...pageProps} />
-            </AppShell>
-          </ToasterProvider>
+          <HeroUIProvider>
+            <ToasterProvider>
+              <AppShell>
+                <Component {...pageProps} />
+              </AppShell>
+            </ToasterProvider>
+          </HeroUIProvider>
         </QueryClientProvider>
-      </HeroUIProvider>
+      </ThemeProvider>
     </SessionProvider>
   );
 }

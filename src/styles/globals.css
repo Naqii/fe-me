@@ -1,31 +1,47 @@
 @import "tailwindcss";
 
-/* Jika menggunakan pendekatan CSS-first Tailwind v4 (tanpa tailwind.config.js): */
+/* Layer utama */
 @layer theme, base, components, utilities;
 
 @plugin '../hero.ts';
 @source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 
-/* Opsi: definisikan variabel tema (warna, radius, dll.) via @theme */
+/* Warna default (light mode) */
 @theme {
-  --color-primary: #2563eb;
-  --color-primary-foreground: #ffffff;
-  --color-secondary: #475569;
-  --color-secondary-foreground: #ffffff;
-  --color-success: #10b981;
-  --color-danger: #ef4444;
-  --color-warning: #facc15;
+  --color-primary: #016b61;
+  --color-primary-foreground: #e3fdfd;
+  --color-secondary: #00adb5;
+  --color-secondary-foreground: #e3fdfd;
+  --color-success: #016b61;
+  --color-danger: #a72703;
+  --color-warning: #ffc50f;
   --radius-lg: 1rem;
 }
 
-/* file: globals.css */
-.hot-container {
-  position: relative;
-  z-index: 1; /* biar table tetap di bawah sidebar */
+/* Mode gelap */
+@layer base {
+  .dark {
+    --color-primary: #00adb5;
+    --color-secondary: #393e46;
+    --color-background: #222831;
+    color-scheme: dark;
+    background-color: var(--color-background);
+    color: #eeeeee;
+  }
 }
 
-/* header Handsontable biasanya z-index tinggi → turunkan */
+/* Handsontable fix */
+.hot-container {
+  position: relative;
+  z-index: 1;
+}
+
 .hot-container .ht_clone_top,
 .hot-container .ht_clone_inline_start {
   z-index: 0 !important;
+}
+
+html,
+body {
+  @apply transition-colors duration-500;
 }

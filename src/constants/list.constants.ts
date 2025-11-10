@@ -9,14 +9,14 @@ const DELAY = 1000;
 const LIMIT_DEFAULT = LIMIT_LIST[0].value;
 
 const PAGE_DEFAULT = 1;
-const LIMIT_TEACHER = 5;
-const LIMIT_EVENT = 4;
+const LIMIT_VIDEO = 4;
+const LIMIT_IMAGE = 4;
 
 export {
   LIMIT_LIST,
   DELAY,
   LIMIT_DEFAULT,
   PAGE_DEFAULT,
-  LIMIT_TEACHER,
-  LIMIT_EVENT,
+  LIMIT_VIDEO,
+  LIMIT_IMAGE,
 };
