@@ -50,7 +50,7 @@ const LandingPageLayoutNavbar = () => {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
       className={cn(
-        "fixed top-4 left-1/2 z-50 w-[90%] -translate-x-1/2 rounded-2xl backdrop-blur-lg transition-all duration-500",
+        "fixed top-4 left-1/2 z-50 -translate-x-1/2 rounded-full backdrop-blur-lg transition-all duration-500",
         scrolled
           ? "scale-[0.98] bg-white/60 shadow-lg" // Keep white background on scroll
           : "bg-white/80", // Keep white background when not scrolled
@@ -62,44 +62,45 @@ const LandingPageLayoutNavbar = () => {
         isBordered
         isBlurred={false}
         className={cn(
-          "rounded-2xl border border-gray-200 bg-transparent shadow-none",
+          "rounded-full border border-gray-200 bg-transparent shadow-none",
           "transition-colors duration-500 ease-in-out",
         )}
       >
-        {/* Brand + Menu */}
-        <div className="flex items-center gap-8">
-          <NavbarBrand as={Link} href="/">
-            <Image
-              src="/images/general/2.jpg"
-              alt="logo"
-              width={45}
-              height={45}
-              className="cursor-pointer rounded-full"
-            />
-          </NavbarBrand>
+        {/* Kiri: Logo */}
+        <NavbarBrand as={Link} href="/">
+          <Image
+            src="/images/general/2.jpg"
+            alt="logo"
+            width={38}
+            height={38}
+            className="cursor-pointer rounded-full"
+          />
+        </NavbarBrand>
 
-          <NavbarContent className="hidden md:flex">
-            {NAV_ITEMS.map((item) => (
-              <NavbarItem
-                key={`nav-${item.label}`}
-                as={Link}
-                href={item.href}
-                className={cn(
-                  "font-medium transition-colors duration-300",
-                  router.pathname === item.href
-                    ? "text-primary font-extrabold"
-                    : "hover:text-primary text-gray-700 dark:text-white",
-                )}
-              >
-                {item.label}
-              </NavbarItem>
-            ))}
-          </NavbarContent>
-        </div>
+        {/* Tengah: Menu */}
+        <NavbarContent
+          justify="center"
+          className="hidden items-center gap-6 md:flex"
+        >
+          {NAV_ITEMS.map((item) => (
+            <NavbarItem
+              key={`nav-${item.label}`}
+              as={Link}
+              href={item.href}
+              className={cn(
+                "text-sm font-medium transition-colors duration-300 md:text-base",
+                router.pathname === item.href
+                  ? "text-primary font-bold"
+                  : "hover:text-primary text-gray-700 dark:text-gray-300 dark:hover:text-white",
+              )}
+            >
+              {item.label}
+            </NavbarItem>
+          ))}
+        </NavbarContent>
 
-        {/* Right Side */}
+        {/* Kanan: Toggle theme */}
         <NavbarContent justify="end" className="items-center gap-2">
-          {/* Dark/Light Toggle */}
           <motion.div
             whileTap={{ scale: 0.9 }}
             className="flex items-center transition-all"
