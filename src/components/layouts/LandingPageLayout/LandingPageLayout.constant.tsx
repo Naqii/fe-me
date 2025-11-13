@@ -1,5 +1,3 @@
-import { FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
-
 const NAV_ITEMS = [
   {
     label: "Me",
@@ -36,22 +34,4 @@ const BUTTON_ITEMS = [
   },
 ];
 
-const SOCIAL_ITEMS = [
-  {
-    label: "GitHub",
-    href: "https://github.com/Naqii",
-    icon: <FaGithub />,
-  },
-  {
-    label: "Instagram",
-    href: "https://instagram.com/its.hqq",
-    icon: <FaInstagram />,
-  },
-  {
-    label: "Linkedin",
-    href: "https://www.linkedin.com/in/sunan-baihaqi-amrullah/",
-    icon: <FaLinkedin />,
-  },
-];
-
-export { BUTTON_ITEMS, SOCIAL_ITEMS, NAV_ITEMS };
+export { BUTTON_ITEMS, NAV_ITEMS };

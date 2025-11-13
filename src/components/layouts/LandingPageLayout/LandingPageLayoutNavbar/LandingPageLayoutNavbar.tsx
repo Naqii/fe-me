@@ -7,7 +7,6 @@ import {
   NavbarContent,
   NavbarItem,
   Switch,
-  Button,
 } from "@heroui/react";
 import Image from "next/image";
 import { NAV_ITEMS } from "../LandingPageLayout.constant";
@@ -16,7 +15,6 @@ import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { FaSun } from "react-icons/fa";
 import { FaMoon } from "react-icons/fa6";
-import { RxHamburgerMenu } from "react-icons/rx";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
 
