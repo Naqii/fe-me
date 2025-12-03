@@ -21,7 +21,7 @@ export async function middleware(request: NextRequest) {
   if (pathname.startsWith("/admin")) {
     if (!token) {
       const url = new URL("/auth/login", request.url);
-      url.searchParams.set("callbackUrl", encodeURI(request.url));
+      url.searchParams.set("callbackUrl", encodeURIComponent(request.url));
       return NextResponse.redirect(url);
     }
 
@@ -32,18 +32,21 @@ export async function middleware(request: NextRequest) {
     if (pathname === "/admin") {
       return NextResponse.redirect(new URL("/admin/image", request.url));
     }
+
+    return NextResponse.next();
   }
 
   if (pathname.startsWith("/users")) {
     if (!token) {
       const url = new URL("/auth/login", request.url);
-      url.searchParams.set("callbackUrl", encodeURI(request.url));
+      url.searchParams.set("callbackUrl", encodeURIComponent(request.url));
       return NextResponse.redirect(url);
     }
 
     if (pathname === "/users") {
       return NextResponse.redirect(new URL("/users/profile", request.url));
     }
+    return NextResponse.next();
   }
 }
 

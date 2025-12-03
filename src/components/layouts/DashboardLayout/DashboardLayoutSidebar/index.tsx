@@ -1,3 +1,3 @@
-import DashboardLayoutSidebar from "./DashbordLayoutSidebar";
+import DashboardLayoutSidebar from "./DashboardLayoutSidebar";
 
 export default DashboardLayoutSidebar;
