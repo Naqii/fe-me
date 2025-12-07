@@ -7,8 +7,11 @@ const useChangeUrl = () => {
   const router = useRouter();
   const debounce = useDebounce();
 
-  const currentLimit = router.query.limit;
-  const currentPage = router.query.page;
+  const defaultLimit = "8";
+  const defaultPage = "1";
+
+  const currentLimit = (router.query.limit as string) || defaultLimit;
+  const currentPage = (router.query.page as string) || defaultPage;
   const currentSearch = router.query.search;
   const currentStudent = router.query.student;
   const currentIsOnline = router.query.isOnline;

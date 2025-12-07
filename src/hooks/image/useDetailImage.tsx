@@ -60,6 +60,7 @@ const useDetailImage = () => {
     resolver: yupResolver(schema),
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const preview = form.watch("image");
   const fileUrl = form.getValues("image");
 

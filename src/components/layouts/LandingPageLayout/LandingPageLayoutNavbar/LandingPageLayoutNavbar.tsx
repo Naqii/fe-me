@@ -6,43 +6,42 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  Switch,
 } from "@heroui/react";
 import Image from "next/image";
 import { NAV_ITEMS } from "../LandingPageLayout.constant";
 import { cn } from "@/utils/cn";
-import { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
-import { FaSun } from "react-icons/fa";
-import { FaMoon } from "react-icons/fa6";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
 
 const LandingPageLayoutNavbar = () => {
   const router = useRouter();
-  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isTransitioning] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
+  const navFloatRef = useRef<HTMLElement | null>(null);
 
-  // Handle scroll for floating effect
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Prevent hydration mismatch
   useEffect(() => setMounted(true), []);
 
-  // Smooth fade transition when theme changes
+  // Scroll shadow/scale
   useEffect(() => {
-    if (!mounted) return;
-    setIsTransitioning(true);
-    const timer = setTimeout(() => setIsTransitioning(false), 400);
-    return () => clearTimeout(timer);
-  }, [theme, mounted]);
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted || !navFloatRef.current) return;
+    const el = navFloatRef.current;
+    const ro = new ResizeObserver(([entry]) => {
+      const h = Math.ceil(entry.contentRect.height);
+      // tambahkan sedikit gap agar tak terlalu rapat
+      document.documentElement.style.setProperty("--nav-h", `${h + 8}px`);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [mounted]);
 
   if (!mounted) return null;
 
@@ -50,6 +49,7 @@ const LandingPageLayoutNavbar = () => {
     <>
       {/* Navbar utama */}
       <motion.nav
+        ref={navFloatRef}
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
@@ -108,6 +108,8 @@ const LandingPageLayoutNavbar = () => {
             {/* Tombol Hamburger - hanya tampil di mobile */}
             <div className="flex md:hidden">
               <motion.button
+                aria-label="Toggle menu"
+                aria-expanded={openMenu}
                 onClick={() => setOpenMenu(!openMenu)}
                 whileTap={{ scale: 0.9 }}
                 className="rounded-full bg-gray-200 p-2 transition-all dark:bg-gray-800"
@@ -119,40 +121,6 @@ const LandingPageLayoutNavbar = () => {
                 )}
               </motion.button>
             </div>
-
-            {/* Tombol dark/light mode */}
-            <motion.div
-              whileTap={{ scale: 0.9 }}
-              className="flex items-center transition-all"
-            >
-              <Switch
-                size="sm"
-                color="primary"
-                isSelected={theme === "dark"}
-                onValueChange={(val) => setTheme(val ? "dark" : "light")}
-                thumbIcon={({ isSelected }) =>
-                  isSelected ? (
-                    <motion.div
-                      key="moon"
-                      initial={{ rotate: -90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <FaMoon className="h-3 w-3 text-black dark:text-white" />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="sun"
-                      initial={{ rotate: 90, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <FaSun className="h-3 w-3 text-yellow-500" />
-                    </motion.div>
-                  )
-                }
-              />
-            </motion.div>
           </NavbarContent>
         </Navbar>
       </motion.nav>

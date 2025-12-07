@@ -3,7 +3,7 @@ import Home from "@/components/views/Home";
 
 const HomePage = () => {
   return (
-    <LandingPageLayout title="home">
+    <LandingPageLayout title="Home">
       <Home />
     </LandingPageLayout>
   );

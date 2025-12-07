@@ -63,6 +63,7 @@ const InputFile = (props: PropTypes) => {
         dropCurrent.removeEventListener("drop", handleDrop);
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDropable]);
 
   const handleOnUpload = (e: ChangeEvent<HTMLInputElement>) => {

@@ -36,6 +36,7 @@ const useAddImageModal = () => {
     resolver: yupResolver(schema),
   });
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const preview = watch("image");
 
   const fileUrl = getValues("image");

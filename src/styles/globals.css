@@ -45,3 +45,18 @@ html,
 body {
   @apply transition-colors duration-500;
 }
+
+:root {
+  --nav-h: 5rem;
+} /* kira-kira tinggi nav floating */
+@media (min-width: 768px) {
+  :root {
+    --nav-h: 5.5rem;
+  }
+}
+
+@layer utilities {
+  .break-inside-avoid {
+    break-inside: avoid;
+  }
+}

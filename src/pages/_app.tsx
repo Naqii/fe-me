@@ -7,6 +7,7 @@ import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import type { AppProps } from "next/app";
 import { ThemeProvider } from "next-themes";
+import ThemeToggleFab from "@/components/ui/ThemeToggleFab";
 
 type AppPropsWithSession = AppProps & {
   pageProps: {
@@ -40,6 +41,7 @@ export default function App({
             <ToasterProvider>
               <AppShell>
                 <Component {...pageProps} />
+                <ThemeToggleFab position="br" zIndex={80} />
               </AppShell>
             </ToasterProvider>
           </HeroUIProvider>

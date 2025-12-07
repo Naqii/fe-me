@@ -1,0 +1,11 @@
+import { NextPage } from "next";
+
+const WorkPage: NextPage = () => {
+  return (
+    <main className="min-h-screen px-6 pt-(--nav-h,5rem) pb-24">
+      <h1 className="mb-6 text-2xl font-semibold">Work</h1>
+    </main>
+  );
+};
+
+export default WorkPage;
