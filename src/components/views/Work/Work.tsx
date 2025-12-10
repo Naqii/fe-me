@@ -1,4 +1,4 @@
-import CardEvent from "@/components/ui/CardEvent";
+import CardWork from "@/components/ui/CardWork";
 import useVideo from "@/hooks/video/useVideo";
 import type { IVideo } from "@/types/Video";
 import dynamic from "next/dynamic";
@@ -29,11 +29,9 @@ const WorkPage = () => {
 
         <div className="flex flex-col gap-3 sm:gap-4">
           {!loading
-            ? videos.map((video) => (
-                <CardEvent key={video._id} videos={video} />
-              ))
+            ? videos.map((video) => <CardWork key={video._id} videos={video} />)
             : Array.from({ length: 3 }).map((_, index) => (
-                <CardEvent key={`loading-${index}`} isLoading />
+                <CardWork key={`loading-${index}`} isLoading />
               ))}
         </div>
       </section>

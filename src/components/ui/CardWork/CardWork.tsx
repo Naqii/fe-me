@@ -9,7 +9,7 @@ interface PropTypes {
   // key?: string;
 }
 
-const CardEvent = (props: PropTypes) => {
+const CardWork = (props: PropTypes) => {
   const { videos, isLoading } = props;
   return (
     <Card
@@ -50,8 +50,9 @@ const CardEvent = (props: PropTypes) => {
               <div className="w-full sm:w-80">
                 <Skeleton className="bg-default-300 aspect-video w-full rounded-lg" />
               </div>
-              <div className="flex min-w-0 flex-1 flex-col justify-center">
-                <Skeleton className="bg-default-300 h-6 w-3/4 rounded-lg" />
+              <div className="flex w-full min-w-0 flex-1 flex-col justify-center gap-2">
+                {/* <Skeleton className="bg-default-300 h-4 w-full rounded-lg" /> */}
+                <Skeleton className="bg-default-300 h-4 w-5/6 rounded-lg" />
               </div>
             </div>
           </CardBody>
@@ -61,4 +62,4 @@ const CardEvent = (props: PropTypes) => {
   );
 };
 
-export default CardEvent;
+export default CardWork;
