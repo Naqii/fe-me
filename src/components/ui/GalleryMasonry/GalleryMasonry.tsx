@@ -107,8 +107,9 @@ const GalleryMasonry = (props: PropTypes) => {
     // Tidak ada gambar sama sekali
     if (isLoading && loadingContent) {
       return (
-        <section className="relative min-h-[200px]">
-          {loadingContent}
+        <section>
+          <div className="mb-4">{TopContent}</div>
+          <div className="relative min-h-[200px]">{loadingContent}</div>
           <div className="mt-4">{BottomContent}</div>
         </section>
       );

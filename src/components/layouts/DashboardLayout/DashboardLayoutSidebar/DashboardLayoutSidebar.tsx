@@ -26,8 +26,7 @@ const DashboardLayoutSidebar = ({ sidebarItems, isOpen }: PropTypes) => {
     <div
       className={cn(
         "fixed z-50 flex h-screen w-full max-w-[300px] flex-col justify-between border-r px-4 py-6 transition-all duration-300 lg:relative",
-        // 🌞 Light mode → putih | 🌙 Dark mode → hitam pekat
-        "border-gray-200 bg-white text-gray-800 dark:border-gray-800 dark:bg-gray-950 dark:text-gray-100",
+        "bg-background text-foreground border-default-200",
         { "-translate-x-full lg:translate-x-0": !isOpen },
       )}
     >
@@ -58,8 +57,8 @@ const DashboardLayoutSidebar = ({ sidebarItems, isOpen }: PropTypes) => {
               className={cn(
                 "my-1 h-12 rounded-lg text-base font-medium transition-all duration-200",
                 router.pathname.startsWith(item.href)
-                  ? "bg-primary text-white dark:bg-teal-600 dark:text-white"
-                  : "hover:bg-primary/10 hover:text-primary text-gray-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white",
+                  ? "bg-primary text-primary-foreground"
+                  : "text-foreground data-[hover=true]:bg-default-100",
               )}
               startContent={item.icon}
               textValue={item.label}
