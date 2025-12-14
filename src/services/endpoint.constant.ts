@@ -3,6 +3,7 @@ const endpoint = {
   MEDIA: "/media",
   IMG: "/images",
   VID: "/videos",
+  WORK: "/works",
 };
 
 export default endpoint;

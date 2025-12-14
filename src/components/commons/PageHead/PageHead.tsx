@@ -5,7 +5,6 @@ interface PropTypes {
 }
 
 const PageHead = (props: PropTypes) => {
-  //sebagai title default
   const { title = "Home" } = props;
   return (
     <Head>
@@ -13,7 +12,7 @@ const PageHead = (props: PropTypes) => {
       <meta charSet="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>{title}</title>
-      <link rel="icon" href="/images/general/2.jpg" className="rounded-full" />
+      <link rel="icon" href="/images/general/2.png" />
     </Head>
   );
 };

@@ -1,59 +1,56 @@
-import { IVideo } from "@/types/Video";
+import { IWork } from "@/types/Work";
 import { cn } from "@/utils/cn";
-import { Card, CardBody, Image, Skeleton } from "@heroui/react";
+import { convertTime } from "@/utils/date";
+import { Card, CardBody, CardHeader, Image, Skeleton } from "@heroui/react";
 import { Fragment } from "react";
 
 interface PropTypes {
-  videos?: IVideo;
+  works?: IWork;
   isLoading?: boolean;
   // key?: string;
 }
 
 const CardWork = (props: PropTypes) => {
-  const { videos, isLoading } = props;
+  const { works, isLoading } = props;
   return (
     <Card
-      shadow="sm"
+      shadow="md"
       isPressable
       // as={Link}
       // href={`/event/${events?.slug}`}
       // key={key}
-      classNames={{ body: "p-2" }}
-      className={cn("cursor-pointer")}
+      className={cn("flex h-full cursor-pointer flex-col")}
     >
       {!isLoading ? (
         <Fragment>
-          <CardBody>
-            <div className="flex flex-col items-start gap-2 sm:flex-row">
-              <div className="w-full sm:w-80">
-                <Image
-                  alt="cover"
-                  src={`${videos?.thumbnail}`}
-                  width={420}
-                  height={180}
-                  className="aspect-video w-full rounded-lg object-cover"
-                  sizes="(max-width: 640px) 420px, 320px"
-                />
-              </div>
-              <div className="flex min-w-0 flex-1 flex-col justify-center">
-                <h2 className="line-clamp-1 text-sm font-semibold text-[#006d63] sm:text-base">
-                  {videos?.title}
-                </h2>
-              </div>
+          <CardHeader className="flex-col items-start px-4 pt-2 pb-0">
+            <h2 className="line-clamp-1 text-sm font-semibold text-[#006d63] sm:text-base">
+              {works?.title}
+            </h2>
+            <small className="text-foreground-500">
+              {convertTime(`${works?.dateFinished}`)}
+            </small>
+          </CardHeader>
+          <CardBody className="flex flex-1 flex-col py-2">
+            <div className="relative aspect-video w-full overflow-hidden rounded-lg">
+              <Image
+                alt="cover"
+                src={`${works?.thumbnail}`}
+                removeWrapper
+                className="h-full w-full object-cover"
+              />
             </div>
           </CardBody>
         </Fragment>
       ) : (
         <Fragment>
-          <CardBody>
-            <div className="flex flex-col items-start gap-2 sm:flex-row">
-              <div className="w-full sm:w-80">
-                <Skeleton className="bg-default-300 aspect-video w-full rounded-lg" />
-              </div>
-              <div className="flex w-full min-w-0 flex-1 flex-col justify-center gap-2">
-                {/* <Skeleton className="bg-default-300 h-4 w-full rounded-lg" /> */}
-                <Skeleton className="bg-default-300 h-4 w-5/6 rounded-lg" />
-              </div>
+          <CardHeader className="flex-col items-start px-4 pt-3 pb-1">
+            <Skeleton className="h-4 w-3/4 rounded-md" />
+            <Skeleton className="mt-1 h-3 w-1/2 rounded-md" />
+          </CardHeader>
+          <CardBody className="flex flex-1 py-2">
+            <div className="relative aspect-video w-full overflow-hidden rounded-lg">
+              <Skeleton className="h-full w-full rounded-lg" />
             </div>
           </CardBody>
         </Fragment>

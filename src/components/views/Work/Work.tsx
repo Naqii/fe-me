@@ -1,13 +1,13 @@
 import CardWork from "@/components/ui/CardWork";
-import useVideo from "@/hooks/video/useVideo";
-import type { IVideo } from "@/types/Video";
-import dynamic from "next/dynamic";
+import useWork from "@/hooks/work/useWork";
+import { IWork } from "@/types/Work";
 
 const WorkPage = () => {
-  const { dataVideo, isLoadingVideo, isRefetchingVideo } = useVideo();
+  const { dataWork, isLoadingWork } = useWork();
 
-  const videos: IVideo[] = dataVideo?.data ?? [];
-  const loading = isLoadingVideo || isRefetchingVideo;
+  const works: IWork[] = dataWork?.data ?? [];
+  const isServer = typeof window === "undefined";
+  const loading = isServer || isLoadingWork;
 
   return (
     <main
@@ -27,11 +27,16 @@ const WorkPage = () => {
           </div>
         </header>
 
-        <div className="flex flex-col gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {!loading
-            ? videos.map((video) => <CardWork key={video._id} videos={video} />)
-            : Array.from({ length: 3 }).map((_, index) => (
-                <CardWork key={`loading-${index}`} isLoading />
+            ? works?.map((work) => (
+                <CardWork key={`card-work-${work._id}`} works={work} />
+              ))
+            : Array.from({ length: 6 }).map((_, index) => (
+                <CardWork
+                  key={`card-work-loading-${index}`}
+                  isLoading={loading}
+                />
               ))}
         </div>
       </section>
@@ -39,6 +44,4 @@ const WorkPage = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(WorkPage), {
-  ssr: false,
-});
+export default WorkPage;
