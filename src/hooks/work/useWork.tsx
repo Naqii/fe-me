@@ -1,16 +1,14 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
 import useChangeUrl from "../useChangeUrl";
 import { useQuery } from "@tanstack/react-query";
 import workServices from "@/services/work.service";
 
 const useWork = () => {
-  const [selectedId, setSelectedId] = useState<string>("");
   const router = useRouter();
-  const { currentLimit, currentPage, currentSearch } = useChangeUrl();
+  const { currentSearch } = useChangeUrl();
 
   const getWork = async () => {
-    let params = `limit=${currentLimit}&page=${currentPage}`;
+    let params = ``;
     if (currentSearch) {
       params += `&search=${currentSearch}`;
     }
@@ -19,25 +17,15 @@ const useWork = () => {
     return data;
   };
 
-  const {
-    data: dataWork,
-    isLoading: isLoadingWork,
-    isRefetching: isRefetchingWork,
-    refetch: refetchWorks,
-  } = useQuery({
-    queryKey: ["Work", currentPage, currentLimit, currentSearch],
+  const { data: dataWork, isLoading: isLoadingWork } = useQuery({
+    queryKey: ["Work", currentSearch],
     queryFn: () => getWork(),
-    enabled: router.isReady && !!currentPage && !!currentLimit,
+    enabled: router.isReady,
   });
 
   return {
     dataWork,
     isLoadingWork,
-    isRefetchingWork,
-    refetchWorks,
-
-    selectedId,
-    setSelectedId,
   };
 };
 

@@ -2,6 +2,7 @@ import { IWork } from "@/types/Work";
 import { cn } from "@/utils/cn";
 import { convertTime } from "@/utils/date";
 import { Card, CardBody, CardHeader, Image, Skeleton } from "@heroui/react";
+import Link from "next/link";
 import { Fragment } from "react";
 
 interface PropTypes {
@@ -16,8 +17,8 @@ const CardWork = (props: PropTypes) => {
     <Card
       shadow="md"
       isPressable
-      // as={Link}
-      // href={`/event/${events?.slug}`}
+      as={Link}
+      href={`/works/${works?._id}`}
       // key={key}
       className={cn("flex h-full cursor-pointer flex-col")}
     >
