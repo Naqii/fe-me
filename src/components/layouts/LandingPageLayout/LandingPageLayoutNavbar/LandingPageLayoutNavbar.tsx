@@ -73,7 +73,7 @@ const LandingPageLayoutNavbar = () => {
           {/* Kiri: Logo */}
           <NavbarBrand as={Link} href="/">
             <Image
-              src="/images/general/2.jpg"
+              src="/images/general/2.png"
               alt="logo"
               width={38}
               height={38}

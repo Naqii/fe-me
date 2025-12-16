@@ -36,4 +36,5 @@ const convertTime = (isoDate: string) => {
   });
   return `${date} WIB`;
 };
+
 export { toDateStandard, toInputDate, convertTime };

@@ -34,7 +34,7 @@ const DashboardLayoutSidebar = ({ sidebarItems, isOpen }: PropTypes) => {
       <div>
         <div className="flex w-full justify-center">
           <Image
-            src="/images/general/2.jpg"
+            src="/images/general/2.png"
             alt="logo"
             width={180}
             height={60}

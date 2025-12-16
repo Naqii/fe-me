@@ -3,9 +3,9 @@ import useWork from "@/hooks/work/useWork";
 import { IWork } from "@/types/Work";
 
 const WorkPage = () => {
-  const { dataWork, isLoadingWork } = useWork();
+  const { allWork, isLoadingWork } = useWork();
 
-  const works: IWork[] = dataWork?.data ?? [];
+  const works: IWork[] = allWork;
   const isServer = typeof window === "undefined";
   const loading = isServer || isLoadingWork;
 

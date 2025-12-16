@@ -1,4 +1,5 @@
 import { CiImageOn, CiVideoOn } from "react-icons/ci";
+import { BsPersonWorkspace } from "react-icons/bs";
 
 const SIDEBAR_ADMIN = [
   {
@@ -13,6 +14,12 @@ const SIDEBAR_ADMIN = [
     href: "/admin/video",
     icon: <CiVideoOn />,
   },
+  {
+    key: "works",
+    label: "Work",
+    href: "/admin/work",
+    icon: <BsPersonWorkspace />,
+  },
 ];
 
 const SIDEBAR_MEMBER = [
@@ -25,8 +32,14 @@ const SIDEBAR_MEMBER = [
   {
     key: "video",
     label: "Video",
-    href: "/member/video",
+    href: "/admin/video",
     icon: <CiVideoOn />,
+  },
+  {
+    key: "works",
+    label: "Work",
+    href: "/member/work",
+    icon: <BsPersonWorkspace />,
   },
 ];
 
