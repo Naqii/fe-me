@@ -3,12 +3,12 @@ import useDetailWork from "@/hooks/work/useDetailWork";
 import { convertTime } from "@/utils/date";
 
 const DetailWork = () => {
-  const { dataDetailWork, isLoadingDetailWork } = useDetailWork();
+  const { dataWork, isLoadingWork } = useDetailWork();
 
-  const work = dataDetailWork;
+  const work = dataWork;
   const hasVideo = typeof work?.content === "string";
 
-  if (isLoadingDetailWork || !work) {
+  if (isLoadingWork || !work) {
     return (
       <main style={{ paddingTop: "var(--nav-h, 5rem)" }}>
         <section className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -34,7 +34,7 @@ const DetailWork = () => {
   return (
     <main
       role="main"
-      aria-busy={isLoadingDetailWork}
+      aria-busy={isLoadingWork}
       style={{ paddingTop: "var(--nav-h, 5rem)" }}
     >
       <section className="mx-auto max-w-6xl px-4 sm:px-6">

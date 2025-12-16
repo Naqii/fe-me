@@ -1,8 +1,6 @@
 import { ToasterContext } from "@/contexts/ToasterContext";
 import workServices from "@/services/work.service";
 import { IWork } from "@/types/Work";
-import { toDateStandard } from "@/utils/date";
-import { DateValue } from "@heroui/react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useContext } from "react";
@@ -16,7 +14,11 @@ const useDetailWork = () => {
     return data.data;
   };
 
-  const { data: dataWork, refetch: refetchWorks } = useQuery({
+  const {
+    data: dataWork,
+    isLoading: isLoadingWork,
+    refetch: refetchWorks,
+  } = useQuery({
     queryKey: ["Work", query.id],
     queryFn: getWorkById,
     enabled: isReady,
@@ -49,15 +51,12 @@ const useDetailWork = () => {
   });
 
   const handleUpdateWork = (data: IWork) => {
-    const payload = {
-      ...data,
-      dateFinished: toDateStandard(data.dateFinished as DateValue),
-    };
-    mutateUpdateWork(payload);
+    mutateUpdateWork(data);
   };
 
   return {
     dataWork,
+    isLoadingWork,
 
     handleUpdateWork,
 

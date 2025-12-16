@@ -52,7 +52,6 @@ const InfoTab = (props: PropType) => {
     if (isSuccessUpdate) {
       resetUpdateInfo();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessUpdate]);
 
   return (

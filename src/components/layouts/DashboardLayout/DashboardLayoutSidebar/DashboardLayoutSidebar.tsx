@@ -61,7 +61,6 @@ const DashboardLayoutSidebar = ({ sidebarItems, isOpen }: PropTypes) => {
                   : "text-foreground data-[hover=true]:bg-default-100",
               )}
               startContent={item.icon}
-              textValue={item.label}
               aria-labelledby={item.label}
               aria-describedby={item.label}
             >

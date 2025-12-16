@@ -70,7 +70,7 @@ const ThumbnailTab = (props: PropType) => {
                 src={currentThumbnail}
                 alt="thumbnail"
                 fill
-                className="relative!"
+                className="relative! rounded-lg"
               />
             </Skeleton>
           </div>

@@ -2,6 +2,7 @@ import * as Yup from "yup";
 import useMediaHandling from "../useMediaHandling";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import useDetailWork from "./useDetailWork";
 
 const schemaUpdateThumbnail = Yup.object().shape({
   thumbnail: Yup.mixed<FileList | string>().required("Please input Thumbnail"),
@@ -15,6 +16,8 @@ const useThumbnailTab = () => {
     handleUploadFile,
     handleDeleteFile,
   } = useMediaHandling();
+
+  const { dataWork } = useDetailWork();
 
   const {
     control: controlUpdateThumbnail,
@@ -39,9 +42,13 @@ const useThumbnailTab = () => {
     files: FileList,
     onChange: (files: FileList | undefined) => void,
   ) => {
+    const oldThumbnail = dataWork?.thumbnail;
     handleUploadFile(files, onChange, (fileUrl: string | undefined) => {
       if (fileUrl) {
         setValueUpdateThumbnail("thumbnail", fileUrl);
+        if (oldThumbnail) {
+          handleDeleteFile(oldThumbnail, () => {});
+        }
       }
     });
   };
