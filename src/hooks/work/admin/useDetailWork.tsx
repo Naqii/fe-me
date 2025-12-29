@@ -14,12 +14,8 @@ const useDetailWork = () => {
     return data.data;
   };
 
-  const {
-    data: dataWork,
-    isLoading: isLoadingWork,
-    refetch: refetchWorks,
-  } = useQuery({
-    queryKey: ["Work", query.id],
+  const { data: dataWork, refetch: refetchWorks } = useQuery({
+    queryKey: ["Work"],
     queryFn: getWorkById,
     enabled: isReady,
   });
@@ -50,13 +46,10 @@ const useDetailWork = () => {
     },
   });
 
-  const handleUpdateWork = (data: IWork) => {
-    mutateUpdateWork(data);
-  };
+  const handleUpdateWork = (data: IWork) => mutateUpdateWork(data);
 
   return {
     dataWork,
-    isLoadingWork,
 
     handleUpdateWork,
 

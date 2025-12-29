@@ -1,9 +1,9 @@
 import YouTubeEmbed from "@/components/ui/YoutubeEmbed";
-import useDetailWork from "@/hooks/work/useDetailWork";
+import useDetailWorkGuest from "@/hooks/work/useDetailWorkGuest";
 import { convertTime } from "@/utils/date";
 
-const DetailWork = () => {
-  const { dataWork, isLoadingWork } = useDetailWork();
+const DetailWorkGuest = () => {
+  const { dataWork, isLoadingWork } = useDetailWorkGuest();
 
   const work = dataWork;
   const hasVideo = typeof work?.content === "string";
@@ -55,4 +55,4 @@ const DetailWork = () => {
   );
 };
 
-export default DetailWork;
+export default DetailWorkGuest;

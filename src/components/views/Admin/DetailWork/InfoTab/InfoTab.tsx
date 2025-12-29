@@ -1,4 +1,4 @@
-import useInfoTab from "@/hooks/work/useInfoTab";
+import useInfoTab from "@/hooks/work/admin/useInfoTab";
 import { IWork } from "@/types/Work";
 import { toInputDate } from "@/utils/date";
 import {
@@ -39,7 +39,6 @@ const InfoTab = (props: PropType) => {
     setValueUpdateInfo("content", `${dataWork?.content}`);
     setValueUpdateInfo("description", `${dataWork?.description}`);
     setValueUpdateInfo("isShow", `${dataWork?.isShow}`);
-    setValueUpdateInfo("description", `${dataWork?.description}`);
     if (dataWork?.dateFinished) {
       setValueUpdateInfo(
         "dateFinished",
@@ -52,6 +51,7 @@ const InfoTab = (props: PropType) => {
     if (isSuccessUpdate) {
       resetUpdateInfo();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessUpdate]);
 
   return (
@@ -112,11 +112,10 @@ const InfoTab = (props: PropType) => {
                   {...field}
                   label="Status"
                   variant="bordered"
-                  labelPlacement="outside"
-                  defaultSelectedKeys={[dataWork?.isShow ? "true" : "false"]}
                   isInvalid={errorsUpdateInfo.isShow !== undefined}
                   errorMessage={errorsUpdateInfo.isShow?.message}
                   disallowEmptySelection
+                  defaultSelectedKeys={[dataWork?.isShow ? "true" : "false"]}
                   placeholder="Choose Status"
                 >
                   <SelectItem key="true">Show</SelectItem>
@@ -132,7 +131,7 @@ const InfoTab = (props: PropType) => {
               render={({ field }) => (
                 <Textarea
                   {...field}
-                  label="Descritpion"
+                  label="Description"
                   variant="bordered"
                   type="text"
                   labelPlacement="outside"

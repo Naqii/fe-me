@@ -1,11 +1,11 @@
 import CardWork from "@/components/ui/CardWork";
-import useWork from "@/hooks/work/useWork";
+import useWorkGuest from "@/hooks/work/useWorkGuest";
 import { IWork } from "@/types/Work";
 
 const WorkPage = () => {
-  const { allWork, isLoadingWork } = useWork();
+  const { displayWork, isLoadingWork } = useWorkGuest();
 
-  const works: IWork[] = allWork;
+  const works: IWork[] = displayWork;
   const isServer = typeof window === "undefined";
   const loading = isServer || isLoadingWork;
 

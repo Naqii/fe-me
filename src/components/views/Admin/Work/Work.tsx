@@ -1,14 +1,12 @@
 import DropDownAction from "@/components/commons/DropDownAction";
 import DataTable from "@/components/ui/DataTable";
 import useChangeUrl from "@/hooks/useChangeUrl";
+import useWorkAdmin from "@/hooks/work/admin/useWork";
 import { Chip, useDisclosure } from "@heroui/react";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { Key, ReactNode, useCallback, useEffect } from "react";
 import { COLUMN_LISTS_WORK } from "./Work.constant";
-import useWork from "@/hooks/work/useWork";
-import Image from "next/image";
-import DeleteWorkModal from "./DeleteWorkModal";
-import AddWorkModal from "./AddWorkModal";
 
 const Work = () => {
   const { push, isReady, query } = useRouter();
@@ -20,25 +18,23 @@ const Work = () => {
 
     selectedId,
     setSelectedId,
-  } = useWork();
+  } = useWorkAdmin();
+
+  const { setUrl } = useChangeUrl();
 
   const addWorkModal = useDisclosure();
   const deleteWorkModal = useDisclosure();
-  const { setUrl } = useChangeUrl();
 
   useEffect(() => {
     if (isReady) {
       setUrl();
-      refetchWorks();
-      setSelectedId("");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady]);
 
   const renderCell = useCallback(
+    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     (work: Record<string, unknown>, columnKey: Key) => {
       const cellValue = work[columnKey as keyof typeof work];
-
       switch (columnKey) {
         case "thumbnail":
           return (
@@ -74,7 +70,7 @@ const Work = () => {
           return cellValue as ReactNode;
       }
     },
-    [push, setSelectedId, deleteWorkModal],
+    [push],
   );
 
   return (
@@ -82,22 +78,15 @@ const Work = () => {
       {Object.keys(query).length > 0 && (
         <DataTable
           columns={COLUMN_LISTS_WORK}
-          emptyContent="Work is empty"
+          emptyContent="Work is Empty"
           isLoading={isLoadingWork || isRefetchingWork}
-          data={dataWork?.data || []}
+          data={dataWork?.data}
           onClickButtonTopContent={addWorkModal.onOpen}
           buttonTopContentLabel="Create Work"
           renderCell={renderCell}
           totalPages={dataWork?.pagination.totalPages}
         />
       )}
-      <AddWorkModal {...addWorkModal} refetchWork={refetchWorks} />
-      <DeleteWorkModal
-        {...deleteWorkModal}
-        selectedId={selectedId}
-        setSelectedId={setSelectedId}
-        refetchWork={refetchWorks}
-      />
     </section>
   );
 };

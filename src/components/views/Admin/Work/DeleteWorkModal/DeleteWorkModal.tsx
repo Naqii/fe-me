@@ -8,7 +8,7 @@ import {
   ModalHeader,
   Spinner,
 } from "@heroui/react";
-import useDeleteWorkModal from "@/hooks/work/useDeleteWorkModal";
+import useDeleteWorkModal from "@/hooks/work/admin/useDeleteWorkModal";
 
 interface PropTypes {
   isOpen: boolean;

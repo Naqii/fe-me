@@ -1,7 +1,7 @@
-import useDetailWork from "@/hooks/work/useDetailWork";
 import { Tab, Tabs } from "@heroui/react";
 import InfoTab from "./InfoTab";
 import ThumbnailTab from "./ThumbnailTab/ThumbnailTab";
+import useDetailWork from "@/hooks/work/admin/useDetailWork";
 
 const DetailWork = () => {
   const {

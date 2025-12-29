@@ -1,5 +1,5 @@
 import InputFile from "@/components/ui/InputFile";
-import useAddWorkModal from "@/hooks/work/useAddWorkModal";
+import useAddWorkModal from "@/hooks/work/admin/useAddWorkModal";
 import {
   Button,
   DatePicker,

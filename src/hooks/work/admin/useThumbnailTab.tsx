@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import useMediaHandling from "../useMediaHandling";
+import useMediaHandling from "../../useMediaHandling";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import useDetailWork from "./useDetailWork";

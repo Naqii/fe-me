@@ -1,13 +1,11 @@
-import { useRouter } from "next/router";
-import useChangeUrl from "../useChangeUrl";
-import { useQuery } from "@tanstack/react-query";
+import useChangeUrl from "@/hooks/useChangeUrl";
 import workServices from "@/services/work.service";
-import { useMemo, useState } from "react";
-import { IWork } from "@/types/Work";
+import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
-const useWork = () => {
+const useWorkAdmin = () => {
   const [selectedId, setSelectedId] = useState<string>("");
-
   const router = useRouter();
   const { currentLimit, currentPage, currentSearch } = useChangeUrl();
 
@@ -29,16 +27,11 @@ const useWork = () => {
   } = useQuery({
     queryKey: ["Work", currentPage, currentLimit, currentSearch],
     queryFn: () => getWork(),
-    enabled: router.isReady,
+    enabled: router.isReady && !!currentPage && !!currentLimit,
   });
-
-  const allWork: IWork[] = useMemo(() => {
-    return (dataWork?.data ?? []).filter((work: IWork) => work.isShow === true);
-  }, [dataWork]);
 
   return {
     dataWork,
-    allWork,
     isLoadingWork,
     isRefetchingWork,
     refetchWorks,
@@ -48,4 +41,4 @@ const useWork = () => {
   };
 };
 
-export default useWork;
+export default useWorkAdmin;

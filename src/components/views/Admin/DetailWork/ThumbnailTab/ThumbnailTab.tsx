@@ -1,5 +1,5 @@
 import InputFile from "@/components/ui/InputFile";
-import useThumbnailTab from "@/hooks/work/useThumbnailTab";
+import useThumbnailTab from "@/hooks/work/admin/useThumbnailTab";
 import { IWork } from "@/types/Work";
 import {
   Button,
