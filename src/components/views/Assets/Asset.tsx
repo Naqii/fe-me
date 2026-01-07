@@ -1,11 +1,12 @@
-import useVideo from "@/hooks/video/useVideo";
+import useAssetGuest from "@/hooks/asset/useAssetGuest";
 
 const AssetsPage = () => {
-  const { dataVideo, isLoadingVideo, isRefetchingVideo } = useVideo();
+  const { dataAsset, displayAsset, isLoadingAsset, refetchAssets } =
+    useAssetGuest();
 
-  const videos = dataVideo?.data || [];
-  const totalPages = dataVideo?.pagination?.totalPages ?? 1;
-  const loading = isLoadingVideo || isRefetchingVideo;
+  const assets = dataAsset?.data || [];
+  const totalPages = dataAsset?.pagination?.totalPages ?? 1;
+  const loading = isLoadingAsset;
 
   return (
     <main

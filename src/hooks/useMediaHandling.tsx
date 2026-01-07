@@ -1,5 +1,6 @@
 import { ToasterContext } from "@/contexts/ToasterContext";
 import uploadServices from "@/services/upload.service";
+import { IFile } from "@/types/File";
 import { useMutation } from "@tanstack/react-query";
 import { useContext } from "react";
 
@@ -8,23 +9,39 @@ const useMediaHandling = () => {
 
   const uploadFile = async (
     file: File,
-    callback: (fileUrl: string) => void,
+    callback: (data: {
+      url: string;
+      publicId: string;
+      resourceType: "image" | "video" | "raw";
+    }) => void,
   ) => {
     const formData = new FormData();
     formData.append("file", file);
     const {
       data: {
-        data: { secure_url: fileUrl },
+        data: {
+          url: secure_url,
+          publicId: public_id,
+          resourceType: resource_type,
+        },
       },
     } = await uploadServices.singlePict(formData);
-    callback(fileUrl);
+    callback({
+      url: secure_url,
+      publicId: public_id,
+      resourceType: resource_type,
+    });
   };
 
   const { mutate: mutateUploadFile, isPending: isPendingMutateUploadFile } =
     useMutation({
       mutationFn: (variables: {
         file: File;
-        callback: (fileUrl: string) => void;
+        callback: (data: {
+          url: string;
+          publicId: string;
+          resourceType: "image" | "video" | "raw";
+        }) => void;
       }) => uploadFile(variables.file, variables.callback),
       onError: (error) => {
         setToaster({
@@ -34,53 +51,104 @@ const useMediaHandling = () => {
       },
     });
 
-  const deleteFile = async (fileUrl: string, callback: () => void) => {
-    const res = await uploadServices.deleteFile({ fileUrl });
+  const uploadArchive = async (
+    file: File,
+    callback: (fileUrl: string) => void,
+  ) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const {
+      data: {
+        data: { secure_url: fileUrl },
+      },
+    } = await uploadServices.singleArch(formData);
+
+    callback(fileUrl);
+  };
+
+  const {
+    mutate: mutateUploadArchive,
+    isPending: isPendingMutateUploadArchive,
+  } = useMutation({
+    mutationFn: (variables: {
+      file: File;
+      callback: (fileUrl: string) => void;
+    }) => uploadArchive(variables.file, variables.callback),
+    onError: (error) => {
+      setToaster({
+        type: "error",
+        message: error?.message || "An error occurred",
+      });
+    },
+  });
+
+  const deleteFile = async (
+    file: Pick<IFile, "publicId" | "resourceType">,
+    callback: () => void,
+  ) => {
+    const res = await uploadServices.deleteFile(file);
+
     if (res.data.meta.status === 200) {
       callback();
     } else {
-      setToaster({
-        type: "error",
-        message: "Failed to delete file",
-      });
+      throw new Error("Failed to delete file");
     }
   };
 
   const { mutate: mutateDeleteFile, isPending: isPendingMutateDeleteFile } =
     useMutation({
-      mutationFn: (variables: { fileUrl: string; callback: () => void }) =>
-        deleteFile(variables.fileUrl, variables.callback),
-      onError: (error) => {
-        setToaster({
-          type: "error",
-          message: error?.message || "An error occurred",
-        });
-      },
+      mutationFn: (variables: {
+        file: Pick<IFile, "publicId" | "resourceType">;
+        callback: () => void;
+      }) => deleteFile(variables.file, variables.callback),
     });
 
   const handleUploadFile = (
     files: FileList | undefined,
     onChange: (files: FileList | undefined) => void,
-    callback: (fileUrl?: string) => void,
+    callback: (data: {
+      url: string;
+      publicId: string;
+      resourceType: "image" | "video" | "raw";
+    }) => void,
   ) => {
     if (files && files.length !== 0) {
       onChange(files);
       mutateUploadFile({
         file: files[0],
-        callback,
+        callback: (data) => {
+          callback(data);
+        },
+      });
+    }
+  };
+
+  const handleUploadArchive = (
+    files: FileList | undefined,
+    onChange: (files: FileList | undefined) => void,
+    callback: (data: {
+      url: string;
+      publicId: string;
+      resourceType: "image" | "video" | "raw";
+    }) => void,
+  ) => {
+    if (files && files.length !== 0) {
+      onChange(files);
+      mutateUploadFile({
+        file: files[0],
+        callback: (data) => {
+          callback(data);
+        },
       });
     }
   };
 
   const handleDeleteFile = (
-    fileUrl: string | FileList | undefined,
+    file: Pick<IFile, "publicId" | "resourceType">,
     callback: (files?: FileList | undefined) => void,
   ) => {
-    if (typeof fileUrl === "string") {
-      mutateDeleteFile({ fileUrl, callback });
-    } else {
-      callback();
-    }
+    mutateDeleteFile({ file, callback });
   };
 
   return {
@@ -88,8 +156,11 @@ const useMediaHandling = () => {
     isPendingMutateUploadFile,
     mutateDeleteFile,
     isPendingMutateDeleteFile,
+    mutateUploadArchive,
+    isPendingMutateUploadArchive,
 
     handleUploadFile,
+    handleUploadArchive,
     handleDeleteFile,
   };
 };

@@ -2,8 +2,9 @@ const endpoint = {
   AUTH: "/auth",
   MEDIA: "/media",
   IMG: "/images",
-  VID: "/videos",
   WORK: "/works",
+  ASSET: "/assets",
+  TEMPLATE: "/templates",
 };
 
 export default endpoint;

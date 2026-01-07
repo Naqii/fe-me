@@ -1,13 +1,13 @@
 import { DateValue } from "@heroui/react";
 
-interface IWork {
+interface IAsset {
   _id?: string;
   title?: string;
   thumbnail?: string | FileList;
-  content?: string;
-  description?: string;
+  asset?: string | FileList;
+  type?: string;
   isShow?: string | boolean;
-  dateFinished?: string | DateValue;
+  updated?: string | DateValue;
 }
 
-export type { IWork };
+export type { IAsset };

@@ -1,31 +1,31 @@
 import DropDownAction from "@/components/commons/DropDownAction";
 import DataTable from "@/components/ui/DataTable";
 import useChangeUrl from "@/hooks/useChangeUrl";
-import useWorkAdmin from "@/hooks/work/admin/useWork";
 import { Chip, useDisclosure } from "@heroui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { Key, ReactNode, useCallback, useEffect } from "react";
-import { COLUMN_LISTS_WORK } from "./Work.constant";
-import AddWorkModal from "./AddWorkModal";
-import DeleteWorkModal from "./DeleteWorkModal";
+import { COLUMN_LISTS_ASSET } from "./Asset.constant";
+import useAssetAdmin from "@/hooks/asset/admin/useAsset";
+import DeleteAssetModal from "./DeleteAssetModal";
+import AddAssetModal from "./AddAssetModal";
 
-const Work = () => {
+const Asset = () => {
   const { push, isReady, query } = useRouter();
   const {
-    dataWork,
-    isLoadingWork,
-    isRefetchingWork,
-    refetchWorks,
+    dataAsset,
+    isLoadingAsset,
+    isRefetchingAsset,
+    refetchAssets,
 
     selectedId,
     setSelectedId,
-  } = useWorkAdmin();
+  } = useAssetAdmin();
 
   const { setUrl } = useChangeUrl();
 
-  const addWorkModal = useDisclosure();
-  const deleteWorkModal = useDisclosure();
+  const addAssetModal = useDisclosure();
+  const deleteAssetModal = useDisclosure();
 
   useEffect(() => {
     if (isReady) {
@@ -35,8 +35,8 @@ const Work = () => {
 
   const renderCell = useCallback(
     // eslint-disable-next-line react-hooks/preserve-manual-memoization
-    (work: Record<string, unknown>, columnKey: Key) => {
-      const cellValue = work[columnKey as keyof typeof work];
+    (asset: Record<string, unknown>, columnKey: Key) => {
+      const cellValue = asset[columnKey as keyof typeof asset];
       switch (columnKey) {
         case "thumbnail":
           return (
@@ -61,10 +61,10 @@ const Work = () => {
         case "actions":
           return (
             <DropDownAction
-              onPressButtonDetail={() => push(`/admin/work/${work._id}`)}
+              onPressButtonDetail={() => push(`/admin/asset/${asset._id}`)}
               onPressButtonDelete={() => {
-                setSelectedId(`${work._id}`);
-                deleteWorkModal.onOpen();
+                setSelectedId(`${asset._id}`);
+                deleteAssetModal.onOpen();
               }}
             />
           );
@@ -79,25 +79,25 @@ const Work = () => {
     <section>
       {Object.keys(query).length > 0 && (
         <DataTable
-          columns={COLUMN_LISTS_WORK}
-          emptyContent="Work is Empty"
-          isLoading={isLoadingWork || isRefetchingWork}
-          data={dataWork?.data}
-          onClickButtonTopContent={addWorkModal.onOpen}
-          buttonTopContentLabel="Create Work"
+          columns={COLUMN_LISTS_ASSET}
+          emptyContent="Asset is Empty"
+          isLoading={isLoadingAsset || isRefetchingAsset}
+          data={dataAsset?.data}
+          onClickButtonTopContent={addAssetModal.onOpen}
+          buttonTopContentLabel="Create Asset"
           renderCell={renderCell}
-          totalPages={dataWork?.pagination.totalPages}
+          totalPages={dataAsset?.pagination.totalPages}
         />
       )}
-      <AddWorkModal {...addWorkModal} refetchWork={refetchWorks} />
-      <DeleteWorkModal
-        {...deleteWorkModal}
+      <AddAssetModal {...addAssetModal} refetchAsset={refetchAssets} />
+      <DeleteAssetModal
+        {...deleteAssetModal}
         selectedId={selectedId}
         setSelectedId={setSelectedId}
-        refetchWork={refetchWorks}
+        refetchAsset={refetchAssets}
       />
     </section>
   );
 };
 
-export default Work;
+export default Asset;

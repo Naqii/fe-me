@@ -1,5 +1,5 @@
 const COLUMN_LISTS_IMAGE = [
-  { name: "IMAGE", uid: "image" },
+  { name: "IMAGE", uid: "imageUrl" },
   { name: "TITLE", uid: "title" },
   { name: "SHOW", uid: "isShow" },
   { name: "ACTIONS", uid: "actions" },

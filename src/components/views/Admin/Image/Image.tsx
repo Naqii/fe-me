@@ -9,6 +9,7 @@ import { Key, ReactNode, useCallback, useEffect } from "react";
 import { COLUMN_LISTS_IMAGE } from "./Image.constant";
 import AddImageModal from "./AddImageModal";
 import DeleteImageModal from "./DeleteImageModal";
+import { IImage } from "@/types/Image";
 
 const Img = () => {
   const { push, isReady, query } = useRouter();
@@ -35,15 +36,21 @@ const Img = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady]);
 
+  const mappedData =
+    dataImage?.data.map((item: IImage) => ({
+      ...item,
+      imageUrl: item.image?.url,
+    })) || [];
+
   const renderCell = useCallback(
     (image: Record<string, unknown>, columnKey: Key) => {
       const cellValue = image[columnKey as keyof typeof image];
 
       switch (columnKey) {
-        case "image":
+        case "imageUrl":
           return (
             <Image
-              src={`${cellValue}`}
+              src={cellValue as string}
               alt="image"
               width={100}
               height={50}
@@ -82,10 +89,10 @@ const Img = () => {
     <section>
       {Object.keys(query).length > 0 && (
         <DataTable
+          data={mappedData}
           columns={COLUMN_LISTS_IMAGE}
           emptyContent="Image is empty"
           isLoading={isLoadingImage || isRefetchingImage}
-          data={dataImage?.data || []}
           onClickButtonTopContent={addImageModal.onOpen}
           buttonTopContentLabel="Create Image"
           renderCell={renderCell}

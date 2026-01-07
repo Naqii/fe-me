@@ -2,7 +2,17 @@ interface IImage {
   _id?: string;
   title?: string;
   isShow?: boolean | string;
-  image?: string | FileList;
+  image?: {
+    url: string | FileList;
+    publicId: string;
+    resourceType: string;
+  };
 }
 
-export type { IImage };
+interface IImageForm extends IImage {
+  url?: string;
+  publicId?: string;
+  resourceType?: string;
+}
+
+export type { IImage, IImageForm };

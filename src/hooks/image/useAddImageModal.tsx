@@ -9,9 +9,15 @@ import imageServices from "@/services/image.services";
 import { useMutation } from "@tanstack/react-query";
 
 const schema = yup.object().shape({
-  title: yup.string().required("Please input title"),
-  image: yup.mixed<FileList | string>().required("Please input icon"),
-  isShow: yup.string().required("Please chose one"),
+  title: yup.string().required(),
+  isShow: yup.string().required(),
+  image: yup
+    .object({
+      url: yup.string().required(),
+      publicId: yup.string().required(),
+      resourceType: yup.string().oneOf(["image", "video", "raw"]).required(),
+    })
+    .required("Please upload image"),
 });
 
 const useAddImageModal = () => {
@@ -19,7 +25,6 @@ const useAddImageModal = () => {
   const {
     isPendingMutateUploadFile,
     isPendingMutateDeleteFile,
-
     handleDeleteFile,
     handleUploadFile,
   } = useMediaHandling();
@@ -37,18 +42,22 @@ const useAddImageModal = () => {
   });
 
   // eslint-disable-next-line react-hooks/incompatible-library
-  const preview = watch("image");
-
-  const fileUrl = getValues("image");
+  const preview = watch("image")?.url;
 
   const handleUploadImage = (
     files: FileList,
     onChange: (files: FileList | undefined) => void,
   ) => {
-    handleUploadFile(files, onChange, (fileUrl: string | undefined) => {
-      if (fileUrl) {
-        setValue("image", fileUrl);
-      }
+    handleUploadFile(files, onChange, (data) => {
+      setValue(
+        "image",
+        {
+          url: data.url,
+          publicId: data.publicId,
+          resourceType: data.resourceType as "image" | "video" | "raw",
+        },
+        { shouldValidate: true },
+      );
     });
   };
 
@@ -60,6 +69,7 @@ const useAddImageModal = () => {
   };
 
   const handleOnClose = (onClose: () => void) => {
+    const fileUrl = getValues("image");
     handleDeleteFile(fileUrl, () => {
       reset();
       onClose();
@@ -102,7 +112,6 @@ const useAddImageModal = () => {
     handleAddImage,
     isPendingMutateAddImage,
     isSuccessMutateAddImage,
-
     preview,
     handleUploadImage,
     isPendingMutateUploadFile,

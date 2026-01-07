@@ -36,8 +36,8 @@ const DashboardLayoutSidebar = ({ sidebarItems, isOpen }: PropTypes) => {
           <Image
             src="/images/general/2.png"
             alt="logo"
-            width={180}
-            height={60}
+            width={200}
+            height={100}
             className="mb-6 w-32 cursor-pointer rounded-full transition-transform duration-300 hover:scale-105"
             onClick={() => router.push("/")}
           />
@@ -55,7 +55,7 @@ const DashboardLayoutSidebar = ({ sidebarItems, isOpen }: PropTypes) => {
               as={Link}
               href={item.href}
               className={cn(
-                "my-1 h-12 rounded-lg text-base font-medium transition-all duration-200",
+                "my-1 h-12 rounded-2xl text-base font-medium transition-all duration-200",
                 router.pathname.startsWith(item.href)
                   ? "bg-primary text-primary-foreground"
                   : "text-foreground data-[hover=true]:bg-default-100",

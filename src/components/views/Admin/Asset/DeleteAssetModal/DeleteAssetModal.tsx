@@ -8,41 +8,41 @@ import {
   ModalHeader,
   Spinner,
 } from "@heroui/react";
-import useDeleteVideoModal from "@/hooks/video/useDeleteVideoModal";
+import useDeleteAssetModal from "@/hooks/asset/admin/useDeleteAssetModal";
 
 interface PropTypes {
   isOpen: boolean;
   onClose: () => void;
   onOpenChange: () => void;
-  refetchVideo: () => void;
+  refetchAsset: () => void;
   selectedId: string;
   setSelectedId: Dispatch<SetStateAction<string>>;
 }
 
-const DeleteVideoModal = (props: PropTypes) => {
+const DeleteAssetModal = (props: PropTypes) => {
   const {
     isOpen,
     onOpenChange,
     onClose,
-    refetchVideo,
+    refetchAsset,
     selectedId,
     setSelectedId,
   } = props;
 
   const {
-    mutateDeleteVideo,
-    isPendingMutateDeleteVideo,
-    isSuccessMutateDeleteVideo,
-  } = useDeleteVideoModal();
+    mutateDeleteAsset,
+    isPendingMutateDeleteAsset,
+    isSuccessMutateDeleteAsset,
+  } = useDeleteAssetModal();
 
   useEffect(() => {
-    if (isSuccessMutateDeleteVideo) {
+    if (isSuccessMutateDeleteAsset) {
       onClose();
-      refetchVideo();
+      refetchAsset();
       setSelectedId("");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccessMutateDeleteVideo, onClose, refetchVideo]);
+  }, [isSuccessMutateDeleteAsset, onClose, refetchAsset]);
 
   return (
     <Modal
@@ -52,10 +52,10 @@ const DeleteVideoModal = (props: PropTypes) => {
       scrollBehavior="inside"
     >
       <ModalContent className="m-4">
-        <ModalHeader>Delete Video</ModalHeader>
+        <ModalHeader>Delete Asset</ModalHeader>
         <ModalBody>
           <p className="text-medium">
-            Are you sure want to delete this Video ?
+            Are you sure want to delete this Asset ?
           </p>
         </ModalBody>
         <ModalFooter>
@@ -66,20 +66,20 @@ const DeleteVideoModal = (props: PropTypes) => {
               onClose();
               setSelectedId("");
             }}
-            disabled={isPendingMutateDeleteVideo}
+            disabled={isPendingMutateDeleteAsset}
           >
             Cancel
           </Button>
           <Button
             color="danger"
             type="submit"
-            disabled={isPendingMutateDeleteVideo}
-            onPress={() => mutateDeleteVideo(selectedId)}
+            disabled={isPendingMutateDeleteAsset}
+            onPress={() => mutateDeleteAsset(selectedId)}
           >
-            {isPendingMutateDeleteVideo ? (
+            {isPendingMutateDeleteAsset ? (
               <Spinner size="sm" color="white" />
             ) : (
-              "Delete Video"
+              "Delete Asset"
             )}
           </Button>
         </ModalFooter>
@@ -88,4 +88,4 @@ const DeleteVideoModal = (props: PropTypes) => {
   );
 };
 
-export default DeleteVideoModal;
+export default DeleteAssetModal;

@@ -1,5 +1,5 @@
-import { CiImageOn, CiVideoOn } from "react-icons/ci";
-import { BsPersonWorkspace } from "react-icons/bs";
+import { CiImageOn } from "react-icons/ci";
+import { BsFileEarmarkRichtext, BsPersonWorkspace } from "react-icons/bs";
 
 const SIDEBAR_ADMIN = [
   {
@@ -9,16 +9,16 @@ const SIDEBAR_ADMIN = [
     icon: <CiImageOn />,
   },
   {
-    key: "video",
-    label: "Video",
-    href: "/admin/video",
-    icon: <CiVideoOn />,
-  },
-  {
     key: "works",
     label: "Work",
     href: "/admin/work",
     icon: <BsPersonWorkspace />,
+  },
+  {
+    key: "assets",
+    label: "Asset",
+    href: "/admin/asset",
+    icon: <BsFileEarmarkRichtext />,
   },
 ];
 
@@ -28,12 +28,6 @@ const SIDEBAR_MEMBER = [
     label: "Image",
     href: "/member/image",
     icon: <CiImageOn />,
-  },
-  {
-    key: "video",
-    label: "Video",
-    href: "/admin/video",
-    icon: <CiVideoOn />,
   },
   {
     key: "works",
