@@ -3,7 +3,7 @@ interface IImage {
   title?: string;
   isShow?: boolean | string;
   image?: {
-    url: string | FileList;
+    url: string;
     publicId: string;
     resourceType: string;
   };

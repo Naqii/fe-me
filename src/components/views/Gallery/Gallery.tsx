@@ -1,15 +1,15 @@
 import GalleryMasonry from "@/components/ui/GalleryMasonry";
-import useImage from "@/hooks/image/useImage";
+import useImageGuest from "@/hooks/image/useImageGuest";
 import { Spinner } from "@heroui/react";
 
 const GalleryPage = () => {
-  const { dataImage, isLoadingImage, isRefetchingImage } = useImage();
+  const { images, dataImage, isLoadingImage, isRefetchingImage } =
+    useImageGuest();
 
-  const images = dataImage?.data || [];
   const totalPages = dataImage?.pagination?.totalPages ?? 1;
   const loading = isLoadingImage || isRefetchingImage;
 
-  const isInitial = !dataImage; // SSR & client render pertama sama-sama undefined
+  const isInitial = isLoadingImage && !dataImage;
 
   return (
     <main
@@ -23,24 +23,19 @@ const GalleryPage = () => {
             <h1 className="text-3xl font-bold tracking-tight text-[#006d63] sm:text-4xl">
               Gallery
             </h1>
-            <p className="text-muted-foreground mt-1">
-              Curated shots from my work layout.
-            </p>
+            <p className="text-muted-foreground mt-1">Curated my shots</p>
           </div>
         </header>
 
         {isInitial ? (
-          // SSR & client render pertama: cabang ini → tidak ada mismatch
-          <div className="flex min-h-[50vh] items-center justify-center">
-            <div className="flex flex-col items-center gap-3">
-              <Spinner
-                color="default"
-                classNames={{
-                  circle1: "border-[#006d63]",
-                }}
-              />
-              <p className="text-muted-foreground text-sm">Loading gallery…</p>
-            </div>
+          <div className="flex flex-col items-center gap-3">
+            <Spinner
+              color="default"
+              classNames={{
+                circle1: "border-[#006d63]",
+              }}
+            />
+            <p className="text-muted-foreground text-sm">Loading gallery…</p>
           </div>
         ) : (
           <GalleryMasonry

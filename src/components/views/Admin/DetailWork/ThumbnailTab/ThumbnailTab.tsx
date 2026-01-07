@@ -1,15 +1,7 @@
 import InputFile from "@/components/ui/InputFile";
 import useThumbnailTab from "@/hooks/work/admin/useThumbnailTab";
 import { IWork } from "@/types/Work";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Skeleton,
-  Spinner,
-} from "@heroui/react";
-import Image from "next/image";
+import { Button, Card, CardBody, CardHeader, Spinner } from "@heroui/react";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
@@ -21,29 +13,36 @@ interface PropType {
 }
 
 const ThumbnailTab = (props: PropType) => {
-  const { currentThumbnail, onUpdate, isPendingUpdate, isSuccessUpdate } =
-    props;
+  const { onUpdate, isPendingUpdate } = props;
 
   const {
+    dataWork,
+    form: {
+      control,
+      handleSubmit,
+      setValue,
+      formState: { errors },
+    },
+    preview,
+
     handleDeleteThumbnail,
     handleUploadThumbnail,
     isPendingMutateDeleteFile,
     isPendingMutateUploadFile,
-
-    controlUpdateThumbnail,
-    handleSubmitUpdateThumbnail,
-    errorsUpdateThumbnail,
-    resetUpdateThumbnail,
-
-    preview,
   } = useThumbnailTab();
 
   useEffect(() => {
-    if (isSuccessUpdate) {
-      resetUpdateThumbnail();
+    if (dataWork?.thumbnail) {
+      setValue("thumbnail", {
+        url: dataWork.thumbnail.url,
+        publicId: dataWork.thumbnail.publicId,
+        resourceType: dataWork.thumbnail.resourceType as
+          | "image"
+          | "video"
+          | "raw",
+      });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSuccessUpdate]);
+  }, [dataWork, setValue]);
 
   return (
     <Card className="w-full p-4 lg:w-1/2">
@@ -54,29 +53,10 @@ const ThumbnailTab = (props: PropType) => {
         </p>
       </CardHeader>
       <CardBody>
-        <form
-          className="flex flex-col gap-4"
-          onSubmit={handleSubmitUpdateThumbnail(onUpdate)}
-        >
-          <div className="flex flex-col gap-2">
-            <p className="text-default-700 text-sm font-medium">
-              Current Thumbnail
-            </p>
-            <Skeleton
-              isLoaded={!!currentThumbnail}
-              className="aspect-video rounded-lg"
-            >
-              <Image
-                src={currentThumbnail}
-                alt="thumbnail"
-                fill
-                className="relative! rounded-lg"
-              />
-            </Skeleton>
-          </div>
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onUpdate)}>
           <Controller
             name="thumbnail"
-            control={controlUpdateThumbnail}
+            control={control}
             render={({ field: { onChange, ...field } }) => (
               <InputFile
                 {...field}
@@ -84,12 +64,12 @@ const ThumbnailTab = (props: PropType) => {
                 onUpload={(files) => handleUploadThumbnail(files, onChange)}
                 isUploading={isPendingMutateUploadFile}
                 isDeleting={isPendingMutateDeleteFile}
-                isInvalid={errorsUpdateThumbnail.thumbnail !== undefined}
-                errorMessage={errorsUpdateThumbnail.thumbnail?.message}
+                isInvalid={errors.thumbnail !== undefined}
+                errorMessage={errors.thumbnail?.message}
                 isDropable
                 label={
                   <p className="text-default-700 mb-2 text-sm font-medium">
-                    Upload New Thumbnail
+                    Curent Thumbnail and Upload New Thumbnail here
                   </p>
                 }
                 preview={typeof preview === "string" ? preview : ""}

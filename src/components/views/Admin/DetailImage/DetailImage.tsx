@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import Image from "next/image";
 import { Controller } from "react-hook-form";
 import {
   Button,
@@ -22,12 +21,10 @@ const DetailImage = () => {
       control,
       handleSubmit,
       setValue,
-      reset,
       formState: { errors },
     },
     mutate,
     isPending,
-    isSuccess,
     preview,
     handleUploadImage,
     handleDeleteImage,
@@ -36,22 +33,22 @@ const DetailImage = () => {
   } = useDetailImage();
 
   useEffect(() => {
-    if (dataImage) {
-      setValue("title", `${dataImage?.title}`);
-      setValue("isShow", `${dataImage?.isShow}`);
-      setValue("image", `${dataImage?.image}`);
+    setValue("title", `${dataImage?.title}`);
+    setValue("isShow", `${dataImage?.isShow}`);
+    if (dataImage?.image) {
+      setValue("image", {
+        url: dataImage.image.url,
+        publicId: dataImage.image.publicId,
+        resourceType: dataImage.image.resourceType as "image" | "video" | "raw",
+      });
     }
   }, [dataImage, setValue]);
-
-  useEffect(() => {
-    if (isSuccess) reset();
-  }, [isSuccess, reset]);
 
   return (
     <Card className="w-full p-4 lg:w-1/2">
       <CardHeader className="flex-col items-start">
         <h1 className="text-xl font-bold">Image Information</h1>
-        <p className="text-default-400 text-sm">Manage this images details</p>
+        <p className="text-default-400 text-sm">Manage image details</p>
       </CardHeader>
 
       <CardBody>
@@ -88,11 +85,10 @@ const DetailImage = () => {
                   labelPlacement="outside"
                   selectedKeys={[field.value]}
                   onSelectionChange={(keys) =>
-                    field.onChange(Array.from(keys)[0]?.toString() ?? "false")
+                    field.onChange(String(Array.from(keys)[0]))
                   }
                   isInvalid={!!errors.isShow}
                   errorMessage={errors.isShow?.message}
-                  placeholder="Choose Status"
                 >
                   <SelectItem key="true">Show</SelectItem>
                   <SelectItem key="false">Hide</SelectItem>
@@ -101,43 +97,25 @@ const DetailImage = () => {
             />
           </Skeleton>
 
-          <div className="flex flex-col gap-2">
-            <p className="text-default-700 text-sm font-medium">
-              Current Image
-            </p>
-            <Skeleton isLoaded={!!dataImage?.image} className="rounded-lg">
-              <div className="relative h-48 w-full max-w-sm overflow-hidden rounded-lg border">
-                {dataImage?.image && typeof dataImage.image === "string" && (
-                  <Image
-                    src={dataImage.image}
-                    alt="image"
-                    fill
-                    className="rounded-lg object-contain"
-                  />
-                )}
-              </div>
-            </Skeleton>
-          </div>
-
+          {/* UPLOAD NEW IMAGE */}
           <Controller
             name="image"
             control={control}
             render={({ field: { onChange, ...field } }) => (
               <InputFile
                 {...field}
-                onDelete={() => handleDeleteImage(onChange)}
+                label={
+                  <p className="text-default-700 mb-2 text-sm font-medium">
+                    Current Image and Upload New Image here
+                  </p>
+                }
+                preview={preview}
                 onUpload={(files) => handleUploadImage(files, onChange)}
+                onDelete={() => handleDeleteImage(onChange)}
                 isUploading={isPendingMutateUploadFile}
                 isDeleting={isPendingMutateDeleteFile}
                 isInvalid={!!errors.image}
                 errorMessage={errors.image?.message}
-                isDropable
-                label={
-                  <p className="text-default-700 mb-2 text-sm font-medium">
-                    Upload New Image
-                  </p>
-                }
-                preview={typeof preview === "string" ? preview : ""}
               />
             )}
           />
@@ -146,7 +124,7 @@ const DetailImage = () => {
             color="danger"
             className="mt-2 bg-[#006d63]"
             type="submit"
-            disabled={isPending || !dataImage?._id}
+            disabled={isPending}
           >
             {isPending ? <Spinner size="sm" color="white" /> : "Save Changes"}
           </Button>

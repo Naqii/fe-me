@@ -9,6 +9,7 @@ import { Key, ReactNode, useCallback, useEffect } from "react";
 import { COLUMN_LISTS_WORK } from "./Work.constant";
 import AddWorkModal from "./AddWorkModal";
 import DeleteWorkModal from "./DeleteWorkModal";
+import { IWork } from "@/types/Work";
 
 const Work = () => {
   const { push, isReady, query } = useRouter();
@@ -22,26 +23,33 @@ const Work = () => {
     setSelectedId,
   } = useWorkAdmin();
 
-  const { setUrl } = useChangeUrl();
-
   const addWorkModal = useDisclosure();
   const deleteWorkModal = useDisclosure();
+  const { setUrl } = useChangeUrl();
 
   useEffect(() => {
     if (isReady) {
       setUrl();
+      refetchWorks();
+      setSelectedId("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady]);
 
+  const mappedData =
+    dataWork?.data.map((item: IWork) => ({
+      ...item,
+      thumbnailUrl: item.thumbnail?.url,
+    })) || [];
+
   const renderCell = useCallback(
-    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     (work: Record<string, unknown>, columnKey: Key) => {
       const cellValue = work[columnKey as keyof typeof work];
       switch (columnKey) {
-        case "thumbnail":
+        case "thumbnailUrl":
           return (
             <Image
-              src={`${cellValue}`}
+              src={cellValue as string}
               alt="thumbnail"
               width={200}
               height={100}
@@ -79,10 +87,10 @@ const Work = () => {
     <section>
       {Object.keys(query).length > 0 && (
         <DataTable
+          data={mappedData}
           columns={COLUMN_LISTS_WORK}
           emptyContent="Work is Empty"
           isLoading={isLoadingWork || isRefetchingWork}
-          data={dataWork?.data}
           onClickButtonTopContent={addWorkModal.onOpen}
           buttonTopContentLabel="Create Work"
           renderCell={renderCell}

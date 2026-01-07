@@ -77,7 +77,13 @@ const InputFile = ({
                 className="bg-danger-100 absolute top-2 right-2"
               >
                 {isDeleting ? (
-                  <Spinner size="sm" color="danger" />
+                  <Spinner
+                    size="sm"
+                    color="default"
+                    classNames={{
+                      circle1: "border-[#006d63]",
+                    }}
+                  />
                 ) : (
                   <CiTrash className="text-danger-500 h-5 w-5" />
                 )}
@@ -87,7 +93,14 @@ const InputFile = ({
         )}
 
         {/* UPLOADING */}
-        {isUploading && <Spinner color="danger" />}
+        {isUploading && (
+          <Spinner
+            color="default"
+            classNames={{
+              circle1: "border-[#006d63]",
+            }}
+          />
+        )}
 
         {/* EMPTY STATE */}
         {!preview && !isUploading && (

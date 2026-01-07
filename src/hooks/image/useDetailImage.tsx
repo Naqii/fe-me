@@ -10,12 +10,20 @@ import { IImage } from "@/types/Image";
 import useMediaHandling from "../useMediaHandling";
 
 const schema = yup.object({
-  title: yup
-    .string()
-    .max(100, "Title cannot exceed 100 characters")
-    .required("Please input title"),
-  isShow: yup.string().required("Please select status"),
-  image: yup.mixed<FileList | string>().required("Please upload an image"),
+  title: yup.string().required("Title is required"),
+  isShow: yup.string().required("Status is required"),
+  image: yup
+    .object({
+      url: yup.string().required(),
+      publicId: yup.string().required(),
+      resourceType: yup
+        .mixed<"image" | "video" | "raw">()
+        .oneOf(["image", "video", "raw"])
+
+        .required(),
+    })
+    .nullable()
+    .required("Please upload image"),
 });
 
 type FormValues = yup.InferType<typeof schema>;
@@ -31,65 +39,85 @@ const useDetailImage = () => {
     handleDeleteFile,
   } = useMediaHandling();
 
-  const { data: dataImage, refetch } = useQuery<IImage>({
-    queryKey: ["Image", query.id],
-    queryFn: async () => {
-      const { data } = await imageServices.getImageById(`${query.id}`);
-      return data.data;
-    },
-    enabled: isReady,
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: async (payload: IImage) => {
-      const { data } = await imageServices.updateImage(`${query.id}`, payload);
-      return data.data;
-    },
-    onError: (error) =>
-      setToaster({
-        type: "error",
-        message: error?.message || "An error occurred",
-      }),
-    onSuccess: () => {
-      refetch();
-      setToaster({ type: "success", message: "Success update Image" });
-    },
-  });
-
   const form = useForm<FormValues>({
     resolver: yupResolver(schema),
   });
 
+  const { setValue, getValues, watch } = form;
+
   // eslint-disable-next-line react-hooks/incompatible-library
-  const preview = form.watch("image");
-  const fileUrl = form.getValues("image");
+  const preview = watch("image")?.url;
+
+  const { data: dataImage } = useQuery<IImage>({
+    queryKey: ["image-detail", query.id],
+    enabled: isReady && !!query.id,
+    queryFn: async () => {
+      const { data } = await imageServices.getImageById(`${query.id}`);
+      return data.data;
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async (payload: IImage) => {
+      const { data } = await imageServices.updateImage(
+        String(query.id),
+        payload,
+      );
+      return data.data;
+    },
+    onSuccess: () => {
+      setToaster({ type: "success", message: "Image updated successfully" });
+    },
+    onError: (error) => {
+      setToaster({
+        type: "error",
+        message: error?.message || "Failed to update image",
+      });
+    },
+  });
 
   const handleUploadImage = (
     files: FileList,
-    onChange: (val?: FileList | string) => void,
+    onChange: (files: FileList | undefined) => void,
   ) => {
-    handleUploadFile(
-      files,
-      onChange,
-      (url) => url && form.setValue("image", url),
-    );
+    handleUploadFile(files, onChange, (data) => {
+      setValue(
+        "image",
+        {
+          url: data.url,
+          publicId: data.publicId,
+          resourceType: data.resourceType,
+        },
+        { shouldValidate: true },
+      );
+    });
   };
 
   const handleDeleteImage = (
     onChange: (files: FileList | undefined) => void,
   ) => {
-    handleDeleteFile(fileUrl, () => onChange(undefined));
+    const image = getValues("image");
+
+    if (!image?.publicId || !image?.resourceType) return;
+
+    handleDeleteFile(
+      {
+        publicId: image.publicId,
+        resourceType: image.resourceType,
+      },
+      () => onChange(undefined),
+    );
   };
 
   return {
     dataImage,
     form,
+    preview,
     handleUploadImage,
     handleDeleteImage,
-    preview,
-    ...updateMutation,
     isPendingMutateUploadFile,
     isPendingMutateDeleteFile,
+    ...updateMutation,
   };
 };
 

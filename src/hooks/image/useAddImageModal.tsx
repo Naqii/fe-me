@@ -43,6 +43,7 @@ const useAddImageModal = () => {
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const preview = watch("image")?.url;
+  const fileUrl = getValues("image");
 
   const handleUploadImage = (
     files: FileList,
@@ -64,12 +65,10 @@ const useAddImageModal = () => {
   const handleDeleteImage = (
     onChange: (files: FileList | undefined) => void,
   ) => {
-    const fileUrl = getValues("image");
     handleDeleteFile(fileUrl, () => onChange(undefined));
   };
 
   const handleOnClose = (onClose: () => void) => {
-    const fileUrl = getValues("image");
     handleDeleteFile(fileUrl, () => {
       reset();
       onClose();

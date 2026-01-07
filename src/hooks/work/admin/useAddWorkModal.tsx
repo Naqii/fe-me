@@ -14,24 +14,24 @@ const schema = Yup.object().shape({
   title: Yup.string()
     .max(100, "Name cannot exceed 100 characters")
     .required("Please input name"),
-  thumbnail: Yup.mixed<FileList | string>().required(
-    "Please upload an thumbnail",
-  ),
   content: Yup.string().required("Please input link from youtube"),
   description: Yup.string().required("Please input description"),
   isShow: Yup.string().required("Please select status"),
   dateFinished: Yup.mixed<DateValue>().required(
     "Please select date finish job",
   ),
+  thumbnail: Yup.object({
+    url: Yup.string().required(),
+    publicId: Yup.string().required(),
+    resourceType: Yup.string().oneOf(["image", "video", "raw"]).required(),
+  }).required("Please upload image"),
 });
 
 const useAddWorkModal = () => {
   const { setToaster } = useContext(ToasterContext);
-
   const {
     isPendingMutateUploadFile,
     isPendingMutateDeleteFile,
-
     handleDeleteFile,
     handleUploadFile,
   } = useMediaHandling();
@@ -49,25 +49,29 @@ const useAddWorkModal = () => {
   });
 
   // eslint-disable-next-line react-hooks/incompatible-library
-  const preview = watch("thumbnail");
-
+  const preview = watch("thumbnail")?.url;
   const fileUrl = getValues("thumbnail");
 
   const handleUploadThumbnail = (
     files: FileList,
     onChange: (files: FileList | undefined) => void,
   ) => {
-    handleUploadFile(files, onChange, (fileUrl: string | undefined) => {
-      if (fileUrl) {
-        setValue("thumbnail", fileUrl);
-      }
+    handleUploadFile(files, onChange, (data) => {
+      setValue(
+        "thumbnail",
+        {
+          url: data.url,
+          publicId: data.publicId,
+          resourceType: data.resourceType as "image" | "video" | "raw",
+        },
+        { shouldValidate: true },
+      );
     });
   };
 
   const handleDeleteThumbnail = (
     onChange: (files: FileList | undefined) => void,
   ) => {
-    const fileUrl = getValues("thumbnail");
     handleDeleteFile(fileUrl, () => onChange(undefined));
   };
 
