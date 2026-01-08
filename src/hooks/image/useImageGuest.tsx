@@ -1,13 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import imageServices from "@/services/image.services";
 import { IImage } from "@/types/Image";
-
-interface ImageResponse {
-  data: IImage[];
-  pagination: {
-    totalPages: number;
-  };
-}
+import useChangeUrl from "../useChangeUrl";
+import { useRouter } from "next/router";
 
 const normalizeIsShow = (value: unknown): boolean => {
   if (typeof value === "boolean") return value;
@@ -16,28 +11,38 @@ const normalizeIsShow = (value: unknown): boolean => {
 };
 
 const useImageGuest = () => {
-  const query = useQuery<ImageResponse>({
-    queryKey: ["images"],
-    queryFn: async () => {
-      const res = await imageServices.getImage();
+  const router = useRouter();
+  const { currentLimit, currentPage, currentSearch } = useChangeUrl();
 
-      return {
-        ...res.data,
-        data: res.data.data.map((img: IImage) => ({
-          ...img,
-          isShow: normalizeIsShow(img.isShow),
-        })),
-      };
-    },
+  const getImage = async () => {
+    let params = `limit=${currentLimit}&page=${currentPage}`;
+    if (currentSearch) {
+      params += `&search=${currentSearch}`;
+    }
+    const res = await imageServices.getImage(params);
+    const { data } = res;
+    return data;
+  };
+
+  const {
+    data: dataImage,
+    isLoading: isLoadingImage,
+    isRefetching: isRefetchingImage,
+    refetch: refetchImages,
+  } = useQuery({
+    queryKey: ["Image", currentPage, currentLimit, currentSearch],
+    queryFn: () => getImage(),
+    enabled: router.isReady && !!currentPage && !!currentLimit,
   });
 
-  const visibleImages = query.data?.data.filter((img) => img.isShow) ?? [];
+  const visibleImages =
+    dataImage?.data?.filter((img: IImage) => normalizeIsShow(img.isShow)) ?? [];
 
   return {
-    dataImage: query.data,
-    images: visibleImages,
-    isLoadingImage: query.isLoading,
-    isRefetchingImage: query.isRefetching,
+    visibleImages,
+    isLoadingImage,
+    isRefetchingImage,
+    refetchImages,
   };
 };
 

@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import useChangeUrl from "../useChangeUrl";
+import useChangeUrl from "../../useChangeUrl";
 import imageServices from "@/services/image.services";
 import { useQuery } from "@tanstack/react-query";
 

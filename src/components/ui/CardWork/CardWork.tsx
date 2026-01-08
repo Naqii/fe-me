@@ -6,37 +6,38 @@ import Link from "next/link";
 import { Fragment } from "react";
 
 interface PropTypes {
-  works?: IWork;
+  work?: IWork;
   isLoading?: boolean;
   // key?: string;
 }
 
 const CardWork = (props: PropTypes) => {
-  const { works, isLoading } = props;
+  const { work, isLoading } = props;
   return (
     <Card
       shadow="md"
       isPressable
       as={Link}
-      href={`/works/${works?._id}`}
+      href={`/works/${work?._id}`}
       // key={key}
       className={cn("flex h-full cursor-pointer flex-col")}
     >
-      {!isLoading ? (
+      {!isLoading && work ? (
         <Fragment>
           <CardHeader className="flex-col items-start px-4 pt-2 pb-0">
             <h2 className="line-clamp-1 text-sm font-semibold text-[#006d63] sm:text-base">
-              {works?.title}
+              {work.title}
             </h2>
             <small className="text-foreground-500">
-              {convertTime(`${works?.dateFinished}`)}
+              {convertTime(`${work?.dateFinished}`)}
             </small>
           </CardHeader>
-          <CardBody className="flex flex-1 flex-col py-2">
+
+          <CardBody className="flex flex-1 py-2">
             <div className="relative aspect-video w-full overflow-hidden rounded-lg">
               <Image
-                alt="cover"
-                src={`${works?.thumbnail}`}
+                alt={work.title}
+                src={`${work?.thumbnail?.url}`}
                 removeWrapper
                 className="h-full w-full object-cover"
               />
@@ -49,6 +50,7 @@ const CardWork = (props: PropTypes) => {
             <Skeleton className="h-4 w-3/4 rounded-md" />
             <Skeleton className="mt-1 h-3 w-1/2 rounded-md" />
           </CardHeader>
+
           <CardBody className="flex flex-1 py-2">
             <div className="relative aspect-video w-full overflow-hidden rounded-lg">
               <Skeleton className="h-full w-full rounded-lg" />

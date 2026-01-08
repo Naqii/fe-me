@@ -12,7 +12,7 @@ import {
   Spinner,
 } from "@heroui/react";
 import InputFile from "@/components/ui/InputFile";
-import useDetailImage from "@/hooks/image/useDetailImage";
+import useDetailImage from "@/hooks/image/admin/useDetailImage";
 
 const DetailImage = () => {
   const {

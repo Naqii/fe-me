@@ -1,7 +1,7 @@
 import { ToasterContext } from "@/contexts/ToasterContext";
 import { useContext } from "react";
 import * as yup from "yup";
-import useMediaHandling from "../useMediaHandling";
+import useMediaHandling from "../../useMediaHandling";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { IImage } from "@/types/Image";

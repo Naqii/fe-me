@@ -103,7 +103,7 @@ const InfoTab = (props: PropType) => {
               )}
             />
           </Skeleton>
-          <Skeleton isLoaded={!!dataWork} className="rounded-lg">
+          <Skeleton isLoaded={!!dataWork}>
             <Controller
               name="isShow"
               control={controlUpdateInfo}
@@ -112,11 +112,13 @@ const InfoTab = (props: PropType) => {
                   {...field}
                   label="Status"
                   variant="bordered"
-                  isInvalid={errorsUpdateInfo.isShow !== undefined}
+                  labelPlacement="outside"
+                  selectedKeys={[field.value]}
+                  onSelectionChange={(keys) =>
+                    field.onChange(String(Array.from(keys)[0]))
+                  }
+                  isInvalid={!!errorsUpdateInfo.isShow}
                   errorMessage={errorsUpdateInfo.isShow?.message}
-                  disallowEmptySelection
-                  defaultSelectedKeys={[dataWork?.isShow ? "true" : "false"]}
-                  placeholder="Choose Status"
                 >
                   <SelectItem key="true">Show</SelectItem>
                   <SelectItem key="false">Hide</SelectItem>

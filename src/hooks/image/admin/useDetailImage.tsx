@@ -7,7 +7,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { ToasterContext } from "@/contexts/ToasterContext";
 import imageServices from "@/services/image.services";
 import { IImage } from "@/types/Image";
-import useMediaHandling from "../useMediaHandling";
+import useMediaHandling from "../../useMediaHandling";
 
 const schema = yup.object({
   title: yup.string().required("Title is required"),

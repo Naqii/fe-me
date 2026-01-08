@@ -1,5 +1,5 @@
 import InputFile from "@/components/ui/InputFile";
-import useAddImageModal from "@/hooks/image/useAddImageModal";
+import useAddImageModal from "@/hooks/image/admin/useAddImageModal";
 import {
   Button,
   Input,

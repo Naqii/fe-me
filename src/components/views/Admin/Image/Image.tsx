@@ -1,6 +1,6 @@
 import DropDownAction from "@/components/commons/DropDownAction";
 import DataTable from "@/components/ui/DataTable";
-import useImage from "@/hooks/image/useImage";
+import useImage from "@/hooks/image/admin/useImage";
 import useChangeUrl from "@/hooks/useChangeUrl";
 import { Chip, useDisclosure } from "@heroui/react";
 import Image from "next/image";

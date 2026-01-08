@@ -8,7 +8,7 @@ import {
   ModalHeader,
   Spinner,
 } from "@heroui/react";
-import useDeleteImageModal from "../../../../../hooks/image/useDeleteImageModal";
+import useDeleteImageModal from "../../../../../hooks/image/admin/useDeleteImageModal";
 
 interface PropTypes {
   isOpen: boolean;

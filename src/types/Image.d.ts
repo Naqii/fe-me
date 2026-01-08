@@ -1,7 +1,7 @@
 interface IImage {
   _id?: string;
   title?: string;
-  isShow?: boolean | string;
+  isShow?: string | boolean;
   image?: {
     url: string;
     publicId: string;

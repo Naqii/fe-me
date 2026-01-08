@@ -1,42 +1,43 @@
-import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import workServices from "@/services/work.service";
-import { useMemo } from "react";
 import { IWork } from "@/types/Work";
-import useChangeUrl from "../useChangeUrl";
+
+interface WorkResponse {
+  data: IWork[];
+  pagination: {
+    totalPages: number;
+  };
+}
+
+const normalizeIsShow = (value: unknown): boolean => {
+  if (typeof value === "boolean") return value;
+  if (typeof value === "string") return value === "true";
+  return false;
+};
 
 const useWorkGuest = () => {
-  const router = useRouter();
-  const { currentSearch } = useChangeUrl();
+  const query = useQuery<WorkResponse>({
+    queryKey: ["work"],
+    queryFn: async () => {
+      const res = await workServices.getWork();
 
-  const getWork = async () => {
-    let params = ``;
-    if (currentSearch) {
-      params += `&search=${currentSearch}`;
-    }
-    const res = await workServices.getWork(params);
-    const { data } = res;
-    return data;
-  };
-
-  const {
-    data: dataWork,
-    isLoading: isLoadingWork,
-    refetch: refetchWorks,
-  } = useQuery({
-    queryKey: ["Work", currentSearch],
-    queryFn: () => getWork(),
-    enabled: router.isReady,
+      return {
+        ...res.data,
+        data: res.data.data.map((work: IWork) => ({
+          ...work,
+          isShow: normalizeIsShow(work.isShow),
+        })),
+      };
+    },
   });
 
-  const displayWork: IWork[] = useMemo(() => {
-    return (dataWork?.data ?? []).filter((work: IWork) => work.isShow === true);
-  }, [dataWork]);
+  const visibleWorks = query.data?.data.filter((work) => work.isShow) ?? [];
 
   return {
-    displayWork,
-    isLoadingWork,
-    refetchWorks,
+    dataWork: query.data,
+    works: visibleWorks,
+    isLoadingWork: query.isLoading,
+    isRefetchingWork: query.isRefetching,
   };
 };
 

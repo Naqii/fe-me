@@ -3,13 +3,12 @@ import useImageGuest from "@/hooks/image/useImageGuest";
 import { Spinner } from "@heroui/react";
 
 const GalleryPage = () => {
-  const { images, dataImage, isLoadingImage, isRefetchingImage } =
-    useImageGuest();
+  const { visibleImages, isLoadingImage, isRefetchingImage } = useImageGuest();
 
-  const totalPages = dataImage?.pagination?.totalPages ?? 1;
+  const totalPages = visibleImages?.pagination?.totalPages ?? 1;
   const loading = isLoadingImage || isRefetchingImage;
 
-  const isInitial = isLoadingImage && !dataImage;
+  const isInitial = isLoadingImage && !visibleImages;
 
   return (
     <main
@@ -39,7 +38,7 @@ const GalleryPage = () => {
           </div>
         ) : (
           <GalleryMasonry
-            images={images}
+            images={visibleImages}
             emptyContent="Image is empty"
             isLoading={loading}
             totalPages={totalPages}

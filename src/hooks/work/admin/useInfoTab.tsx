@@ -1,3 +1,4 @@
+import { toDateStandard } from "@/utils/date";
 import { DateValue } from "@heroui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -10,9 +11,9 @@ const schemaUpdateInfo = Yup.object().shape({
   content: Yup.string().required("Please input link from youtube"),
   description: Yup.string().required("Please input description"),
   isShow: Yup.string().required("Please select status"),
-  dateFinished: Yup.mixed<DateValue>().required(
-    "Please select date finish job",
-  ),
+  dateFinished: Yup.mixed<DateValue>()
+    .required("Please select date finish job")
+    .transform((value) => (value ? toDateStandard(value) : value)),
 });
 
 const useInfoTab = () => {
