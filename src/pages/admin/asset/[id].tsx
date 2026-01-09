@@ -1,4 +1,5 @@
 import DashboardLayout from "@/components/layouts/DashboardLayout";
+import DetailAsset from "@/components/views/Admin/DetailAsset";
 
 const AdminDetailAssetPage = () => {
   return (

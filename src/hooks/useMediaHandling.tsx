@@ -52,56 +52,47 @@ const useMediaHandling = () => {
     });
 
   const uploadArchive = async (
-    file: File,
-    callback: (fileUrl: string) => void,
+    asset: File,
+    callback: (data: {
+      url: string;
+      publicId: string;
+      resourceType: "raw";
+    }) => void,
   ) => {
     const formData = new FormData();
-    formData.append("file", file);
-
+    formData.append("file", asset);
     const {
       data: {
-        data: { secure_url: fileUrl },
+        data: {
+          url: secure_url,
+          publicId: public_id,
+          resourceType: resource_type,
+        },
       },
     } = await uploadServices.singleArch(formData);
-
-    callback(fileUrl);
+    callback({
+      url: secure_url,
+      publicId: public_id,
+      resourceType: resource_type,
+    });
   };
 
-  const {
-    mutate: mutateUploadArchive,
-    isPending: isPendingMutateUploadArchive,
-  } = useMutation({
-    mutationFn: (variables: {
-      file: File;
-      callback: (fileUrl: string) => void;
-    }) => uploadArchive(variables.file, variables.callback),
-    onError: (error) => {
-      setToaster({
-        type: "error",
-        message: error?.message || "An error occurred",
-      });
-    },
-  });
-
-  const deleteFile = async (
-    file: Pick<IFile, "publicId" | "resourceType">,
-    callback: () => void,
-  ) => {
-    const res = await uploadServices.deleteFile(file);
-
-    if (res.data.meta.status === 200) {
-      callback();
-    } else {
-      throw new Error("Failed to delete file");
-    }
-  };
-
-  const { mutate: mutateDeleteFile, isPending: isPendingMutateDeleteFile } =
+  const { mutate: mutateUploadAsset, isPending: isPendingMutateUploadAsset } =
     useMutation({
       mutationFn: (variables: {
-        file: Pick<IFile, "publicId" | "resourceType">;
-        callback: () => void;
-      }) => deleteFile(variables.file, variables.callback),
+        asset: File;
+        callback: (data: {
+          url: string;
+          publicId: string;
+          resourceType: "raw";
+        }) => void;
+      }) => uploadArchive(variables.asset, variables.callback),
+      onError: (error) => {
+        setToaster({
+          type: "error",
+          message: error?.message || "An error occurred",
+        });
+      },
     });
 
   const handleUploadFile = (
@@ -130,13 +121,13 @@ const useMediaHandling = () => {
     callback: (data: {
       url: string;
       publicId: string;
-      resourceType: "image" | "video" | "raw";
+      resourceType: "raw";
     }) => void,
   ) => {
     if (files && files.length !== 0) {
       onChange(files);
-      mutateUploadFile({
-        file: files[0],
+      mutateUploadAsset({
+        asset: files[0],
         callback: (data) => {
           callback(data);
         },
@@ -144,20 +135,41 @@ const useMediaHandling = () => {
     }
   };
 
+  const deleteFile = async (
+    file: Pick<IFile, "publicId" | "resourceType">,
+    callback: () => void,
+  ) => {
+    const res = await uploadServices.deleteFile(file);
+
+    if (res.data.meta.status === 200) {
+      callback();
+    } else {
+      throw new Error("Failed to delete file");
+    }
+  };
+
+  const { mutate: mutateDelete, isPending: isPendingMutateDelete } =
+    useMutation({
+      mutationFn: (variables: {
+        file: Pick<IFile, "publicId" | "resourceType">;
+        callback: () => void;
+      }) => deleteFile(variables.file, variables.callback),
+    });
+
   const handleDeleteFile = (
     file: Pick<IFile, "publicId" | "resourceType">,
     callback: (files?: FileList | undefined) => void,
   ) => {
-    mutateDeleteFile({ file, callback });
+    mutateDelete({ file, callback });
   };
 
   return {
     mutateUploadFile,
     isPendingMutateUploadFile,
-    mutateDeleteFile,
-    isPendingMutateDeleteFile,
-    mutateUploadArchive,
-    isPendingMutateUploadArchive,
+    mutateUploadAsset,
+    isPendingMutateUploadAsset,
+    mutateDelete,
+    isPendingMutateDelete,
 
     handleUploadFile,
     handleUploadArchive,

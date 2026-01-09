@@ -1,22 +1,22 @@
 import InputFile from "@/components/ui/InputFile";
-import useThumbnailTab from "@/hooks/work/admin/useThumbnailTab";
-import { IWork } from "@/types/Work";
+import useAssetTab from "@/hooks/asset/admin/useAssetTab";
+import { IAsset } from "@/types/Asset";
 import { Button, Card, CardBody, CardHeader, Spinner } from "@heroui/react";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
 interface PropType {
-  currentThumbnail: string;
-  onUpdate: (data: IWork) => void;
+  currentAsset: string;
+  onUpdate: (data: IAsset) => void;
   isPendingUpdate: boolean;
   isSuccessUpdate: boolean;
 }
 
-const ThumbnailTab = (props: PropType) => {
+const AssetTab = (props: PropType) => {
   const { onUpdate, isPendingUpdate } = props;
 
   const {
-    dataWork,
+    dataAsset,
     form: {
       control,
       handleSubmit,
@@ -25,51 +25,48 @@ const ThumbnailTab = (props: PropType) => {
     },
     preview,
 
-    handleDeleteThumbnail,
-    handleUploadThumbnail,
+    handleDeleteAsset,
+    handleUploadAsset,
     isPendingMutateDelete,
-    isPendingMutateUploadFile,
-  } = useThumbnailTab();
+    isPendingMutateUploadAsset,
+  } = useAssetTab();
 
   useEffect(() => {
-    if (dataWork?.thumbnail) {
-      setValue("thumbnail", {
-        url: dataWork.thumbnail.url,
-        publicId: dataWork.thumbnail.publicId,
-        resourceType: dataWork.thumbnail.resourceType as
-          | "image"
-          | "video"
-          | "raw",
+    if (dataAsset?.asset) {
+      setValue("asset", {
+        url: dataAsset.asset.url,
+        publicId: dataAsset.asset.publicId,
+        resourceType: dataAsset.asset.resourceType as "image" | "video" | "raw",
       });
     }
-  }, [dataWork, setValue]);
+  }, [dataAsset, setValue]);
 
   return (
     <Card className="w-full p-4 lg:w-1/2">
       <CardHeader className="flex-col items-center">
-        <h1 className="w-full text-xl font-bold">Thumbnail Work</h1>
+        <h1 className="w-full text-xl font-bold">Archive Asset</h1>
         <p className="text-small text-default-400 w-full">
-          Manage thumbnail of this Work
+          Manage Archive of this Asset
         </p>
       </CardHeader>
       <CardBody>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit(onUpdate)}>
           <Controller
-            name="thumbnail"
+            name="asset"
             control={control}
             render={({ field: { onChange, ...field } }) => (
               <InputFile
                 {...field}
-                onDelete={() => handleDeleteThumbnail(onChange)}
-                onUpload={(files) => handleUploadThumbnail(files, onChange)}
-                isUploading={isPendingMutateUploadFile}
+                onDelete={() => handleDeleteAsset(onChange)}
+                onUpload={(files) => handleUploadAsset(files, onChange)}
+                isUploading={isPendingMutateUploadAsset}
                 isDeleting={isPendingMutateDelete}
-                isInvalid={errors.thumbnail !== undefined}
-                errorMessage={errors.thumbnail?.message}
+                isInvalid={errors.asset !== undefined}
+                errorMessage={errors.asset?.message}
                 isDropable
                 label={
                   <p className="text-default-700 mb-2 text-sm font-medium">
-                    Curent Thumbnail and Upload New Thumbnail here
+                    Curent Asset and Upload New Asset here
                   </p>
                 }
                 preview={typeof preview === "string" ? preview : ""}
@@ -80,7 +77,7 @@ const ThumbnailTab = (props: PropType) => {
             color="primary"
             className="bg-[#006d63]"
             type="submit"
-            disabled={isPendingMutateUploadFile || isPendingUpdate || !preview}
+            disabled={isPendingMutateUploadAsset || isPendingUpdate || !preview}
           >
             {isPendingUpdate ? (
               <Spinner size="sm" color="white" />
@@ -94,4 +91,4 @@ const ThumbnailTab = (props: PropType) => {
   );
 };
 
-export default ThumbnailTab;
+export default AssetTab;

@@ -1,13 +1,13 @@
 import InputFile from "@/components/ui/InputFile";
-import useThumbnailTab from "@/hooks/work/admin/useThumbnailTab";
-import { IWork } from "@/types/Work";
+import useThumbnailTab from "@/hooks/asset/admin/useThumbnailTab";
+import { IAsset } from "@/types/Asset";
 import { Button, Card, CardBody, CardHeader, Spinner } from "@heroui/react";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
 interface PropType {
   currentThumbnail: string;
-  onUpdate: (data: IWork) => void;
+  onUpdate: (data: IAsset) => void;
   isPendingUpdate: boolean;
   isSuccessUpdate: boolean;
 }
@@ -16,7 +16,7 @@ const ThumbnailTab = (props: PropType) => {
   const { onUpdate, isPendingUpdate } = props;
 
   const {
-    dataWork,
+    dataAsset,
     form: {
       control,
       handleSubmit,
@@ -32,24 +32,24 @@ const ThumbnailTab = (props: PropType) => {
   } = useThumbnailTab();
 
   useEffect(() => {
-    if (dataWork?.thumbnail) {
+    if (dataAsset?.thumbnail) {
       setValue("thumbnail", {
-        url: dataWork.thumbnail.url,
-        publicId: dataWork.thumbnail.publicId,
-        resourceType: dataWork.thumbnail.resourceType as
+        url: dataAsset.thumbnail.url,
+        publicId: dataAsset.thumbnail.publicId,
+        resourceType: dataAsset.thumbnail.resourceType as
           | "image"
           | "video"
           | "raw",
       });
     }
-  }, [dataWork, setValue]);
+  }, [dataAsset, setValue]);
 
   return (
     <Card className="w-full p-4 lg:w-1/2">
       <CardHeader className="flex-col items-center">
-        <h1 className="w-full text-xl font-bold">Thumbnail Work</h1>
+        <h1 className="w-full text-xl font-bold">Thumbnail Asset</h1>
         <p className="text-small text-default-400 w-full">
-          Manage thumbnail of this Work
+          Manage thumbnail of this Asset
         </p>
       </CardHeader>
       <CardBody>

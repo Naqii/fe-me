@@ -36,7 +36,7 @@ const AddImageModal = (props: PropType) => {
     handleUploadImage,
     isPendingMutateUploadFile,
     handleDeleteImage,
-    isPendingMutateDeleteFile,
+    isPendingMutateDelete,
     handleOnClose,
   } = useAddImageModal();
 
@@ -50,7 +50,7 @@ const AddImageModal = (props: PropType) => {
   const disabledSubmit =
     isPendingMutateAddImage ||
     isPendingMutateUploadFile ||
-    isPendingMutateDeleteFile;
+    isPendingMutateDelete;
 
   return (
     <Modal
@@ -111,7 +111,7 @@ const AddImageModal = (props: PropType) => {
                     onDelete={() => handleDeleteImage(onChange)}
                     onUpload={(files) => handleUploadImage(files, onChange)}
                     isUploading={isPendingMutateUploadFile}
-                    isDeleting={isPendingMutateDeleteFile}
+                    isDeleting={isPendingMutateDelete}
                     isInvalid={errors.image !== undefined}
                     errorMessage={errors.image?.message}
                     isDropable

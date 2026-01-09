@@ -1,7 +1,10 @@
-import useInfoTab from "@/hooks/work/admin/useInfoTab";
-import { IWorkForm } from "@/types/Work";
+import useInfoTab from "@/hooks/asset/admin/useInfoTab";
+import { IAssetForm } from "@/types/Asset";
+import { ICategory } from "@/types/Category";
 import { toInputDate } from "@/utils/date";
 import {
+  Autocomplete,
+  AutocompleteItem,
   Button,
   Card,
   CardBody,
@@ -12,54 +15,58 @@ import {
   SelectItem,
   Skeleton,
   Spinner,
-  Textarea,
 } from "@heroui/react";
 import { useEffect } from "react";
 import { Controller } from "react-hook-form";
 
 interface PropType {
-  dataWork?: IWorkForm;
-  onUpdate: (data: IWorkForm) => void;
+  dataAsset?: IAssetForm;
+  onUpdate: (data: IAssetForm) => void;
   isPendingUpdate: boolean;
   isSuccessUpdate: boolean;
 }
 
 const InfoTab = (props: PropType) => {
-  const { dataWork, onUpdate, isPendingUpdate, isSuccessUpdate } = props;
+  const { dataAsset, onUpdate, isPendingUpdate, isSuccessUpdate } = props;
   const {
+    dataCategory,
+
     controlUpdateInfo,
     handleSubmitUpdateInfo,
     errorsUpdateInfo,
     resetUpdateInfo,
     setValueUpdateInfo,
+
+    setSelectedCategory,
   } = useInfoTab();
 
   useEffect(() => {
-    setValueUpdateInfo("title", `${dataWork?.title}`);
-    setValueUpdateInfo("content", `${dataWork?.content}`);
-    setValueUpdateInfo("description", `${dataWork?.description}`);
-    setValueUpdateInfo("isShow", `${dataWork?.isShow}`);
-    if (dataWork?.dateFinished) {
-      setValueUpdateInfo(
-        "dateFinished",
-        toInputDate(`${dataWork.dateFinished}`),
-      );
+    setValueUpdateInfo("title", `${dataAsset?.title}`);
+    setValueUpdateInfo("category", `${dataAsset?.category}`);
+    setValueUpdateInfo("isShow", `${dataAsset?.isShow}`);
+    if (dataAsset?.updated) {
+      setValueUpdateInfo("updated", toInputDate(`${dataAsset.updated}`));
     }
-  }, [dataWork, setValueUpdateInfo]);
+  }, [dataAsset, setValueUpdateInfo]);
 
   useEffect(() => {
     if (isSuccessUpdate) {
       resetUpdateInfo();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccessUpdate]);
+
+  useEffect(() => {
+    if (dataAsset?.category) {
+      setSelectedCategory(dataAsset.category);
+    }
+  }, [dataAsset, setSelectedCategory]);
 
   return (
     <Card className="w-full p-4 lg:w-1/2">
       <CardHeader className="flex-col items-center">
-        <h1 className="w-full text-xl font-bold">Work Information</h1>
+        <h1 className="w-full text-xl font-bold">Asset Information</h1>
         <p className="text-small text-default-400 w-full">
-          Manage information of this Work
+          Manage information of this Asset
         </p>
       </CardHeader>
       <CardBody>
@@ -67,7 +74,7 @@ const InfoTab = (props: PropType) => {
           className="flex flex-col gap-4"
           onSubmit={handleSubmitUpdateInfo(onUpdate)}
         >
-          <Skeleton isLoaded={!!dataWork?.title} className="rounded-lg">
+          <Skeleton isLoaded={!!dataAsset?.title} className="rounded-lg">
             <Controller
               name="title"
               control={controlUpdateInfo}
@@ -85,25 +92,36 @@ const InfoTab = (props: PropType) => {
               )}
             />
           </Skeleton>
-          <Skeleton isLoaded={!!dataWork?.content} className="rounded-lg">
+          <Skeleton isLoaded={!!dataAsset?.category} className="rounded-lg">
             <Controller
-              name="content"
+              name="category"
               control={controlUpdateInfo}
-              render={({ field }) => (
-                <Input
+              render={({ field: { onChange, ...field } }) => (
+                <Autocomplete
                   {...field}
-                  label="Content"
-                  variant="bordered"
+                  defaultItems={dataCategory?.data.data || []}
+                  label="Category Asset"
                   labelPlacement="outside"
-                  type="text"
-                  isInvalid={errorsUpdateInfo.content !== undefined}
-                  errorMessage={errorsUpdateInfo.content?.message}
-                  className="mt-2"
-                />
+                  variant="bordered"
+                  selectedKey={dataAsset?.category}
+                  isInvalid={errorsUpdateInfo.category !== undefined}
+                  errorMessage={errorsUpdateInfo.category?.message}
+                  onSelectionChange={(value) => {
+                    onChange(value);
+                    setSelectedCategory(value as string);
+                  }}
+                  placeholder="Search Category Here"
+                >
+                  {(category: ICategory) => (
+                    <AutocompleteItem key={`${category._id}`}>
+                      {category.name}
+                    </AutocompleteItem>
+                  )}
+                </Autocomplete>
               )}
             />
           </Skeleton>
-          <Skeleton isLoaded={!!dataWork} className="rounded-lg">
+          <Skeleton isLoaded={!!dataAsset} className="rounded-lg">
             <Controller
               name="isShow"
               control={controlUpdateInfo}
@@ -126,38 +144,20 @@ const InfoTab = (props: PropType) => {
               )}
             />
           </Skeleton>
-          <Skeleton isLoaded={!!dataWork?.description} className="rounded-lg">
+          <Skeleton isLoaded={!!dataAsset?.updated} className="rounded-lg">
             <Controller
-              name="description"
-              control={controlUpdateInfo}
-              render={({ field }) => (
-                <Textarea
-                  {...field}
-                  label="Description"
-                  variant="bordered"
-                  type="text"
-                  labelPlacement="outside"
-                  isInvalid={errorsUpdateInfo.description !== undefined}
-                  errorMessage={errorsUpdateInfo.description?.message}
-                  className="mt-2"
-                />
-              )}
-            />
-          </Skeleton>
-          <Skeleton isLoaded={!!dataWork?.dateFinished} className="rounded-lg">
-            <Controller
-              name="dateFinished"
+              name="updated"
               control={controlUpdateInfo}
               render={({ field }) => (
                 <DatePicker
                   {...field}
-                  label="Date Finished"
+                  label="Updated"
                   variant="bordered"
                   labelPlacement="outside"
                   hideTimeZone
                   showMonthAndYearPickers
-                  isInvalid={errorsUpdateInfo.dateFinished !== undefined}
-                  errorMessage={errorsUpdateInfo.dateFinished?.message}
+                  isInvalid={errorsUpdateInfo.updated !== undefined}
+                  errorMessage={errorsUpdateInfo.updated?.message}
                 />
               )}
             />
@@ -166,7 +166,7 @@ const InfoTab = (props: PropType) => {
             color="primary"
             className="bg-[#006d63]"
             type="submit"
-            disabled={isPendingUpdate || !dataWork?._id}
+            disabled={isPendingUpdate || !dataAsset?._id}
           >
             {isPendingUpdate ? (
               <Spinner size="sm" color="white" />

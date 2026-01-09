@@ -80,7 +80,7 @@ const Work = () => {
           return cellValue as ReactNode;
       }
     },
-    [push],
+    [deleteWorkModal, push, setSelectedId],
   );
 
   return (

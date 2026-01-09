@@ -2,6 +2,7 @@ import * as Yup from "yup";
 import useMediaHandling from "../../useMediaHandling";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import useDetailAsset from "./useDetailAsset";
 
 const schemaUpdateThumbnail = Yup.object().shape({
   thumbnail: Yup.object({
@@ -9,7 +10,6 @@ const schemaUpdateThumbnail = Yup.object().shape({
     publicId: Yup.string().required(),
     resourceType: Yup.mixed<"image" | "video" | "raw">()
       .oneOf(["image", "video", "raw"])
-
       .required(),
   })
     .nullable()
@@ -21,7 +21,7 @@ type FormValues = Yup.InferType<typeof schemaUpdateThumbnail>;
 const useThumbnailTab = () => {
   const {
     isPendingMutateUploadFile,
-    isPendingMutateDeleteFile,
+    isPendingMutateDelete,
 
     handleUploadFile,
     handleDeleteFile,
@@ -72,13 +72,13 @@ const useThumbnailTab = () => {
   };
 
   return {
-    dataWork,
+    dataAsset,
     form,
     preview,
 
     handleDeleteThumbnail,
     handleUploadThumbnail,
-    isPendingMutateDeleteFile,
+    isPendingMutateDelete,
     isPendingMutateUploadFile,
   };
 };

@@ -31,7 +31,7 @@ const useAddWorkModal = () => {
   const { setToaster } = useContext(ToasterContext);
   const {
     isPendingMutateUploadFile,
-    isPendingMutateDeleteFile,
+    isPendingMutateDelete,
     handleDeleteFile,
     handleUploadFile,
   } = useMediaHandling();
@@ -129,7 +129,7 @@ const useAddWorkModal = () => {
     handleUploadThumbnail,
     isPendingMutateUploadFile,
     handleDeleteThumbnail,
-    isPendingMutateDeleteFile,
+    isPendingMutateDelete,
     handleOnClose,
   };
 };

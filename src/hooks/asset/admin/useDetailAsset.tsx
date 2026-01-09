@@ -1,36 +1,36 @@
 import { ToasterContext } from "@/contexts/ToasterContext";
-import workServices from "@/services/work.service";
-import { IWork } from "@/types/Work";
+import assetServices from "@/services/asset.service";
+import { IAsset } from "@/types/Asset";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 
-const useDetailWork = () => {
+const useDetailAsset = () => {
   const { query, isReady } = useRouter();
   const { setToaster } = useContext(ToasterContext);
 
-  const getWorkById = async () => {
-    const { data } = await workServices.getWorkById(`${query.id}`);
+  const getAssetById = async () => {
+    const { data } = await assetServices.getAssetById(`${query.id}`);
     return data.data;
   };
 
-  const { data: dataWork, refetch: refetchWorks } = useQuery({
-    queryKey: ["Work"],
-    queryFn: getWorkById,
+  const { data: dataAsset, refetch: refetchAssets } = useQuery({
+    queryKey: ["Asset"],
+    queryFn: getAssetById,
     enabled: isReady,
   });
 
-  const updateWork = async (payload: IWork) => {
-    const { data } = await workServices.updateWork(`${query.id}`, payload);
+  const updateAsset = async (payload: IAsset) => {
+    const { data } = await assetServices.updateAsset(`${query.id}`, payload);
     return data.data;
   };
 
   const {
-    mutate: mutateUpdateWork,
-    isPending: isPendingMutateUpdateWork,
-    isSuccess: isSuccessMutateUpdateWork,
+    mutate: mutateUpdateAsset,
+    isPending: isPendingMutateUpdateAsset,
+    isSuccess: isSuccessMutateUpdateAsset,
   } = useMutation({
-    mutationFn: (payload: IWork) => updateWork(payload),
+    mutationFn: (payload: IAsset) => updateAsset(payload),
     onError: (error) => {
       setToaster({
         type: "error",
@@ -38,24 +38,24 @@ const useDetailWork = () => {
       });
     },
     onSuccess: () => {
-      refetchWorks();
+      refetchAssets();
       setToaster({
         type: "success",
-        message: "Success update Work",
+        message: "Success update Asset",
       });
     },
   });
 
-  const handleUpdateWork = (data: IWork) => mutateUpdateWork(data);
+  const handleUpdateAsset = (data: IAsset) => mutateUpdateAsset(data);
 
   return {
-    dataWork,
+    dataAsset,
 
-    handleUpdateWork,
+    handleUpdateAsset,
 
-    isPendingMutateUpdateWork,
-    isSuccessMutateUpdateWork,
+    isPendingMutateUpdateAsset,
+    isSuccessMutateUpdateAsset,
   };
 };
 
-export default useDetailWork;
+export default useDetailAsset;

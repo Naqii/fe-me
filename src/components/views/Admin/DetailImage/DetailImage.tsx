@@ -29,7 +29,7 @@ const DetailImage = () => {
     handleUploadImage,
     handleDeleteImage,
     isPendingMutateUploadFile,
-    isPendingMutateDeleteFile,
+    isPendingMutateDelete,
   } = useDetailImage();
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const DetailImage = () => {
           className="flex flex-col gap-4"
           onSubmit={handleSubmit((data) => mutate(data))}
         >
-          <Skeleton isLoaded={!!dataImage}>
+          <Skeleton isLoaded={!!dataImage?.title} className="rounded-lg">
             <Controller
               name="title"
               control={control}
@@ -73,7 +73,7 @@ const DetailImage = () => {
             />
           </Skeleton>
 
-          <Skeleton isLoaded={!!dataImage}>
+          <Skeleton isLoaded={!!dataImage?.isShow} className="rounded-lg">
             <Controller
               name="isShow"
               control={control}
@@ -113,7 +113,7 @@ const DetailImage = () => {
                 onUpload={(files) => handleUploadImage(files, onChange)}
                 onDelete={() => handleDeleteImage(onChange)}
                 isUploading={isPendingMutateUploadFile}
-                isDeleting={isPendingMutateDeleteFile}
+                isDeleting={isPendingMutateDelete}
                 isInvalid={!!errors.image}
                 errorMessage={errors.image?.message}
               />

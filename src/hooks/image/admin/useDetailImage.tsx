@@ -34,7 +34,7 @@ const useDetailImage = () => {
 
   const {
     isPendingMutateUploadFile,
-    isPendingMutateDeleteFile,
+    isPendingMutateDelete,
     handleUploadFile,
     handleDeleteFile,
   } = useMediaHandling();
@@ -116,7 +116,7 @@ const useDetailImage = () => {
     handleUploadImage,
     handleDeleteImage,
     isPendingMutateUploadFile,
-    isPendingMutateDeleteFile,
+    isPendingMutateDelete,
     ...updateMutation,
   };
 };

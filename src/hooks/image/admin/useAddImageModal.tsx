@@ -24,7 +24,7 @@ const useAddImageModal = () => {
   const { setToaster } = useContext(ToasterContext);
   const {
     isPendingMutateUploadFile,
-    isPendingMutateDeleteFile,
+    isPendingMutateDelete,
     handleDeleteFile,
     handleUploadFile,
   } = useMediaHandling();
@@ -115,7 +115,7 @@ const useAddImageModal = () => {
     handleUploadImage,
     isPendingMutateUploadFile,
     handleDeleteImage,
-    isPendingMutateDeleteFile,
+    isPendingMutateDelete,
     handleOnClose,
   };
 };

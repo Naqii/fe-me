@@ -4,7 +4,7 @@ const endpoint = {
   IMG: "/images",
   WORK: "/works",
   ASSET: "/assets",
-  TEMPLATE: "/templates",
+  CATEGORY: "/category",
 };
 
 export default endpoint;

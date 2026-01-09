@@ -1,6 +1,6 @@
 import InputFile from "@/components/ui/InputFile";
 import useAddAssetModal from "@/hooks/asset/admin/useAddAssetModal";
-import { IType } from "@/types/Type";
+import { ICategory } from "@/types/Category";
 import {
   Autocomplete,
   AutocompleteItem,
@@ -30,7 +30,7 @@ const AddAssetModal = (props: PropType) => {
   const { isOpen, onClose, onOpenChange, refetchAsset } = props;
 
   const {
-    dataType,
+    dataCategory,
     control,
     errors,
     handleAddAsset,
@@ -38,9 +38,9 @@ const AddAssetModal = (props: PropType) => {
     isPendingMutateAddAsset,
     isSuccessMutateAddAsset,
 
-    isPendingMutateDeleteFile,
+    isPendingMutateDelete,
     isPendingMutateUploadFile,
-    isPendingMutateUploadArchive,
+    isPendingMutateUploadAsset,
 
     previewThumbnail,
     handleUploadThumbnail,
@@ -93,22 +93,22 @@ const AddAssetModal = (props: PropType) => {
                 )}
               />
               <Controller
-                name="type"
+                name="category"
                 control={control}
                 render={({ field: { onChange, ...field } }) => (
                   <Autocomplete
                     {...field}
-                    defaultItems={dataType?.data.data || []}
-                    label="Type"
+                    defaultItems={dataCategory?.data.data || []}
+                    label="Category"
                     variant="bordered"
-                    isInvalid={errors.type !== undefined}
-                    errorMessage={errors.type?.message}
+                    isInvalid={errors.category !== undefined}
+                    errorMessage={errors.category?.message}
                     onSelectionChange={(value) => onChange(value)}
-                    placeholder="Search Type Here"
+                    placeholder="Search Category Here"
                   >
-                    {(type: IType) => (
-                      <AutocompleteItem key={`${type._id}`}>
-                        {type.name}
+                    {(category: ICategory) => (
+                      <AutocompleteItem key={`${category._id}`}>
+                        {category.name}
                       </AutocompleteItem>
                     )}
                   </Autocomplete>
@@ -157,7 +157,7 @@ const AddAssetModal = (props: PropType) => {
                     onDelete={() => handleDelete(onChange)}
                     onUpload={(files) => handleUploadThumbnail(files, onChange)}
                     isUploading={isPendingMutateUploadFile}
-                    isDeleting={isPendingMutateDeleteFile}
+                    isDeleting={isPendingMutateDelete}
                     isInvalid={errors.thumbnail !== undefined}
                     errorMessage={errors.thumbnail?.message}
                     isDropable
@@ -177,8 +177,8 @@ const AddAssetModal = (props: PropType) => {
                     {...field}
                     onDelete={() => handleDelete(onChange)}
                     onUpload={(files) => handleUploadAsset(files, onChange)}
-                    isUploading={isPendingMutateUploadArchive}
-                    isDeleting={isPendingMutateDeleteFile}
+                    isUploading={isPendingMutateUploadAsset}
+                    isDeleting={isPendingMutateDelete}
                     isInvalid={errors.asset !== undefined}
                     errorMessage={errors.asset?.message}
                     isDropable

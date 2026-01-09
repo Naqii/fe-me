@@ -39,7 +39,7 @@ const AddWorkModal = (props: PropType) => {
     handleUploadThumbnail,
     isPendingMutateUploadFile,
     handleDeleteThumbnail,
-    isPendingMutateDeleteFile,
+    isPendingMutateDelete,
     handleOnClose,
   } = useAddWorkModal();
 
@@ -154,7 +154,7 @@ const AddWorkModal = (props: PropType) => {
                     onDelete={() => handleDeleteThumbnail(onChange)}
                     onUpload={(files) => handleUploadThumbnail(files, onChange)}
                     isUploading={isPendingMutateUploadFile}
-                    isDeleting={isPendingMutateDeleteFile}
+                    isDeleting={isPendingMutateDelete}
                     isInvalid={errors.thumbnail !== undefined}
                     errorMessage={errors.thumbnail?.message}
                     isDropable

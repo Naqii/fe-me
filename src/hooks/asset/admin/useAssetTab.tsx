@@ -2,10 +2,10 @@ import * as Yup from "yup";
 import useMediaHandling from "../../useMediaHandling";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useDetailWork from "./useDetailWork";
+import useDetailAsset from "./useDetailAsset";
 
-const schemaUpdateThumbnail = Yup.object().shape({
-  thumbnail: Yup.object({
+const schemaUpdateAsset = Yup.object().shape({
+  asset: Yup.object({
     url: Yup.string().required(),
     publicId: Yup.string().required(),
     resourceType: Yup.mixed<"image" | "video" | "raw">()
@@ -16,35 +16,35 @@ const schemaUpdateThumbnail = Yup.object().shape({
     .required("Please upload image"),
 });
 
-type FormValues = Yup.InferType<typeof schemaUpdateThumbnail>;
+type FormValues = Yup.InferType<typeof schemaUpdateAsset>;
 
-const useThumbnailTab = () => {
+const useAssetTab = () => {
   const {
-    isPendingMutateUploadFile,
+    isPendingMutateUploadAsset,
     isPendingMutateDelete,
 
-    handleUploadFile,
+    handleUploadArchive,
     handleDeleteFile,
   } = useMediaHandling();
 
-  const { dataWork } = useDetailWork();
+  const { dataAsset } = useDetailAsset();
 
   const form = useForm<FormValues>({
-    resolver: yupResolver(schemaUpdateThumbnail),
+    resolver: yupResolver(schemaUpdateAsset),
   });
 
   const { setValue, getValues, watch } = form;
 
   // eslint-disable-next-line react-hooks/incompatible-library
-  const preview = watch("thumbnail")?.url;
+  const preview = watch("asset")?.url;
 
-  const handleUploadThumbnail = (
+  const handleUploadAsset = (
     files: FileList,
     onChange: (files: FileList | undefined) => void,
   ) => {
-    handleUploadFile(files, onChange, (data) => {
+    handleUploadArchive(files, onChange, (data) => {
       setValue(
-        "thumbnail",
+        "asset",
         {
           url: data.url,
           publicId: data.publicId,
@@ -55,32 +55,32 @@ const useThumbnailTab = () => {
     });
   };
 
-  const handleDeleteThumbnail = (
+  const handleDeleteAsset = (
     onChange: (files: FileList | undefined) => void,
   ) => {
-    const thumbnail = getValues("thumbnail");
+    const asset = getValues("asset");
 
-    if (!thumbnail?.publicId || !thumbnail?.resourceType) return;
+    if (!asset?.publicId || !asset?.resourceType) return;
 
     handleDeleteFile(
       {
-        publicId: thumbnail.publicId,
-        resourceType: thumbnail.resourceType,
+        publicId: asset.publicId,
+        resourceType: asset.resourceType,
       },
       () => onChange(undefined),
     );
   };
 
   return {
-    dataWork,
+    dataAsset,
     form,
     preview,
 
-    handleDeleteThumbnail,
-    handleUploadThumbnail,
+    handleDeleteAsset,
+    handleUploadAsset,
     isPendingMutateDelete,
-    isPendingMutateUploadFile,
+    isPendingMutateUploadAsset,
   };
 };
 
-export default useThumbnailTab;
+export default useAssetTab;

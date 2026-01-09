@@ -9,20 +9,26 @@ import { toDateStandard } from "@/utils/date";
 import { DateValue } from "@heroui/react";
 import { IAsset } from "@/types/Asset";
 import assetServices from "@/services/asset.service";
-import templateServices from "@/services/template.service";
 import { useRouter } from "next/router";
+import categoryServices from "@/services/category.service";
 
 const schema = Yup.object().shape({
   title: Yup.string()
     .max(100, "Name cannot exceed 100 characters")
     .required("Please input name"),
-  thumbnail: Yup.mixed<FileList | string>().required(
-    "Please upload an thumbnail",
-  ),
-  asset: Yup.mixed<FileList | string>().required("Please upload an asset"),
-  type: Yup.string().required("Please chose description"),
+  category: Yup.string().required("Please chose description"),
   isShow: Yup.string().required("Please select status"),
   updated: Yup.mixed<DateValue>().required("Please select lastes update"),
+  thumbnail: Yup.object({
+    url: Yup.string().required(),
+    publicId: Yup.string().required(),
+    resourceType: Yup.string().oneOf(["image"]).required(),
+  }).required("Please upload image"),
+  asset: Yup.object({
+    url: Yup.string().required(),
+    publicId: Yup.string().required(),
+    resourceType: Yup.string().oneOf(["raw"]).required(),
+  }).required("Please upload file"),
 });
 
 const useAddAssetModal = () => {
@@ -30,13 +36,13 @@ const useAddAssetModal = () => {
   const router = useRouter();
 
   const {
-    isPendingMutateUploadArchive,
     isPendingMutateUploadFile,
-    isPendingMutateDeleteFile,
+    isPendingMutateUploadAsset,
+    isPendingMutateDelete,
 
-    handleDeleteFile,
-    handleUploadArchive,
     handleUploadFile,
+    handleUploadArchive,
+    handleDeleteFile,
   } = useMediaHandling();
 
   const {
@@ -52,31 +58,43 @@ const useAddAssetModal = () => {
   });
 
   // eslint-disable-next-line react-hooks/incompatible-library
-  const previewThumbnail = watch("thumbnail");
+  const previewThumbnail = watch("thumbnail")?.url;
   const fileUrlThumbnail = getValues("thumbnail");
 
   const handleUploadThumbnail = (
     files: FileList,
     onChange: (files: FileList | undefined) => void,
   ) => {
-    handleUploadFile(files, onChange, (fileUrl: string | undefined) => {
-      if (fileUrl) {
-        setValue("thumbnail", fileUrl);
-      }
+    handleUploadFile(files, onChange, (data) => {
+      setValue(
+        "thumbnail",
+        {
+          url: data.url,
+          publicId: data.publicId,
+          resourceType: data.resourceType as "image",
+        },
+        { shouldValidate: true },
+      );
     });
   };
 
-  const previewAsset = watch("asset");
+  const previewAsset = watch("asset")?.url;
   const fileUrlAsset = getValues("asset");
 
   const handleUploadAsset = (
     files: FileList,
     onChange: (files: FileList | undefined) => void,
   ) => {
-    handleUploadArchive(files, onChange, (fileUrl: string | undefined) => {
-      if (fileUrl) {
-        setValue("asset", fileUrl);
-      }
+    handleUploadArchive(files, onChange, (data) => {
+      setValue(
+        "asset",
+        {
+          url: data.url,
+          publicId: data.publicId,
+          resourceType: data.resourceType as "raw",
+        },
+        { shouldValidate: true },
+      );
     });
   };
 
@@ -95,9 +113,9 @@ const useAddAssetModal = () => {
     });
   };
 
-  const { data: dataType } = useQuery({
-    queryKey: ["template"],
-    queryFn: () => templateServices.getTemplate(),
+  const { data: dataCategory } = useQuery({
+    queryKey: ["category"],
+    queryFn: () => categoryServices.getCategory(),
     enabled: router.isReady,
   });
 
@@ -136,7 +154,7 @@ const useAddAssetModal = () => {
   };
 
   return {
-    dataType,
+    dataCategory,
     control,
     errors,
     handleAddAsset,
@@ -144,9 +162,9 @@ const useAddAssetModal = () => {
     isPendingMutateAddAsset,
     isSuccessMutateAddAsset,
 
-    isPendingMutateDeleteFile,
     isPendingMutateUploadFile,
-    isPendingMutateUploadArchive,
+    isPendingMutateUploadAsset,
+    isPendingMutateDelete,
 
     previewThumbnail,
     handleUploadThumbnail,

@@ -9,6 +9,7 @@ import { COLUMN_LISTS_ASSET } from "./Asset.constant";
 import useAssetAdmin from "@/hooks/asset/admin/useAsset";
 import DeleteAssetModal from "./DeleteAssetModal";
 import AddAssetModal from "./AddAssetModal";
+import { IAsset } from "@/types/Asset";
 
 const Asset = () => {
   const { push, isReady, query } = useRouter();
@@ -30,15 +31,23 @@ const Asset = () => {
   useEffect(() => {
     if (isReady) {
       setUrl();
+      refetchAssets();
+      setSelectedId("");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady]);
 
+  const mappedData =
+    dataAsset?.data.map((item: IAsset) => ({
+      ...item,
+      thumbnailUrl: item.thumbnail?.url,
+    })) || [];
+
   const renderCell = useCallback(
-    // eslint-disable-next-line react-hooks/preserve-manual-memoization
     (asset: Record<string, unknown>, columnKey: Key) => {
       const cellValue = asset[columnKey as keyof typeof asset];
       switch (columnKey) {
-        case "thumbnail":
+        case "thumbnailUrl":
           return (
             <Image
               src={`${cellValue}`}
@@ -72,17 +81,17 @@ const Asset = () => {
           return cellValue as ReactNode;
       }
     },
-    [push],
+    [deleteAssetModal, push, setSelectedId],
   );
 
   return (
     <section>
       {Object.keys(query).length > 0 && (
         <DataTable
+          data={mappedData}
           columns={COLUMN_LISTS_ASSET}
           emptyContent="Asset is Empty"
           isLoading={isLoadingAsset || isRefetchingAsset}
-          data={dataAsset?.data}
           onClickButtonTopContent={addAssetModal.onOpen}
           buttonTopContentLabel="Create Asset"
           renderCell={renderCell}

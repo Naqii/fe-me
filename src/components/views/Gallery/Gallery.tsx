@@ -1,4 +1,4 @@
-import GalleryMasonry from "@/components/ui/GalleryMasonry";
+import GalleryMasonryClient from "@/components/ui/GalleryMasonry/GalleryPage";
 import useImageGuest from "@/hooks/image/useImageGuest";
 import { Spinner } from "@heroui/react";
 
@@ -7,8 +7,6 @@ const GalleryPage = () => {
 
   const totalPages = visibleImages?.pagination?.totalPages ?? 1;
   const loading = isLoadingImage || isRefetchingImage;
-
-  const isInitial = isLoadingImage && !visibleImages;
 
   return (
     <main
@@ -25,35 +23,24 @@ const GalleryPage = () => {
             <p className="text-muted-foreground mt-1">Curated my shots</p>
           </div>
         </header>
-
-        {isInitial ? (
-          <div className="flex flex-col items-center gap-3">
-            <Spinner
-              color="default"
-              classNames={{
-                circle1: "border-[#006d63]",
-              }}
-            />
-            <p className="text-muted-foreground text-sm">Loading gallery…</p>
-          </div>
-        ) : (
-          <GalleryMasonry
-            images={visibleImages}
-            emptyContent="Image is empty"
-            isLoading={loading}
-            totalPages={totalPages}
-            loadingContent={
-              <div className="bg-background/60 flex h-full w-full items-center justify-center backdrop-blur-sm">
-                <Spinner
-                  color="default"
-                  classNames={{
-                    circle1: "border-[#006d63]",
-                  }}
-                />
-              </div>
-            }
-          />
-        )}
+        <GalleryMasonryClient
+          images={visibleImages}
+          emptyContent="Image is empty"
+          isLoading={loading}
+          totalPages={totalPages}
+          loadingContent={
+            <div className="bg-background/60 flex h-full w-full items-center justify-center backdrop-blur-sm">
+              <Spinner
+                color="default"
+                classNames={{
+                  circle1: "border-[#006d63]",
+                }}
+              >
+                <p className="text-muted-foreground text-sm">Loading gallery</p>
+              </Spinner>
+            </div>
+          }
+        />
       </section>
     </main>
   );
