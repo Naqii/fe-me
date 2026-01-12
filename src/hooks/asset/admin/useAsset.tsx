@@ -1,5 +1,5 @@
 import useChangeUrl from "@/hooks/useChangeUrl";
-import assetServices from "@/services/asset.service";
+import assetServices from "@/services/asset.services";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useState } from "react";

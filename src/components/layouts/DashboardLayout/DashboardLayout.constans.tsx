@@ -1,7 +1,20 @@
 import { CiImageOn } from "react-icons/ci";
 import { BsFileEarmarkRichtext, BsPersonWorkspace } from "react-icons/bs";
+import { BiCategory } from "react-icons/bi";
 
 const SIDEBAR_ADMIN = [
+  {
+    key: "assets",
+    label: "Asset",
+    href: "/admin/asset",
+    icon: <BsFileEarmarkRichtext />,
+  },
+  {
+    key: "category",
+    label: "Category",
+    href: "/admin/category",
+    icon: <BiCategory />,
+  },
   {
     key: "image",
     label: "Image",
@@ -13,12 +26,6 @@ const SIDEBAR_ADMIN = [
     label: "Work",
     href: "/admin/work",
     icon: <BsPersonWorkspace />,
-  },
-  {
-    key: "assets",
-    label: "Asset",
-    href: "/admin/asset",
-    icon: <BsFileEarmarkRichtext />,
   },
 ];
 

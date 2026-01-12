@@ -1,5 +1,5 @@
 import { ToasterContext } from "@/contexts/ToasterContext";
-import assetServices from "@/services/asset.service";
+import assetServices from "@/services/asset.services";
 import { IAsset } from "@/types/Asset";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";

@@ -1,45 +1,43 @@
-import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
-import useChangeUrl from "../useChangeUrl";
-import assetServices from "@/services/asset.service";
+import assetServices from "@/services/asset.services";
 import { IAsset } from "@/types/Asset";
 
-const useAssetGuest = () => {
-  const router = useRouter();
-  const { currentSearch } = useChangeUrl();
-
-  const getAsset = async () => {
-    let params = ``;
-    if (currentSearch) {
-      params += `&search=${currentSearch}`;
-    }
-    const res = await assetServices.getAsset(params);
-    const { data } = res;
-    return data;
+interface AssetResponse {
+  data: IAsset[];
+  pagination: {
+    totalPages: number;
   };
+}
 
-  const {
-    data: dataAsset,
-    isLoading: isLoadingAsset,
-    refetch: refetchAssets,
-  } = useQuery({
-    queryKey: ["Asset", currentSearch],
-    queryFn: () => getAsset(),
-    enabled: router.isReady,
+const normalizeIsShow = (value: unknown): boolean => {
+  if (typeof value === "boolean") return value;
+  if (typeof value === "string") return value === "true";
+  return false;
+};
+
+const useAssetGuest = () => {
+  const query = useQuery<AssetResponse>({
+    queryKey: ["asset"],
+    queryFn: async () => {
+      const res = await assetServices.getAsset();
+
+      return {
+        ...res.data,
+        data: res.data.data.map((asset: IAsset) => ({
+          ...asset,
+          isShow: normalizeIsShow(asset.isShow),
+        })),
+      };
+    },
   });
 
-  const displayAsset: IAsset[] = useMemo(() => {
-    return (dataAsset?.data ?? []).filter(
-      (asset: IAsset) => asset.isShow === true,
-    );
-  }, [dataAsset]);
+  const visibleAssets = query.data?.data.filter((asset) => asset.isShow) ?? [];
 
   return {
-    dataAsset,
-    displayAsset,
-    isLoadingAsset,
-    refetchAssets,
+    dataAsset: query.data,
+    assets: visibleAssets,
+    isLoadingAsset: query.isLoading,
+    isRefetchingAsset: query.isRefetching,
   };
 };
 

@@ -8,9 +8,9 @@ import useMediaHandling from "../../useMediaHandling";
 import { toDateStandard } from "@/utils/date";
 import { DateValue } from "@heroui/react";
 import { IAsset } from "@/types/Asset";
-import assetServices from "@/services/asset.service";
+import assetServices from "@/services/asset.services";
 import { useRouter } from "next/router";
-import categoryServices from "@/services/category.service";
+import categoryServices from "@/services/category.services";
 
 const schema = Yup.object().shape({
   title: Yup.string()

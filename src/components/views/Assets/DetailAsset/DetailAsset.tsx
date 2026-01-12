@@ -1,13 +1,12 @@
-import YouTubeEmbed from "@/components/ui/YoutubeEmbed";
-import useDetailWorkGuest from "@/hooks/work/useDetailWorkGuest";
+import useDetailAssetGuest from "@/hooks/asset/useDetailAssetGuest";
 import { convertTime } from "@/utils/date";
+import { Button } from "@heroui/react";
+import Image from "next/image";
 
-const DetailWorkGuest = () => {
-  const { dataWork, isLoadingWork } = useDetailWorkGuest();
+const DetailAssetGuest = () => {
+  const { dataAsset, isLoadingAsset } = useDetailAssetGuest();
 
-  const hasVideo = typeof dataWork?.content === "string";
-
-  if (isLoadingWork || !dataWork) {
+  if (isLoadingAsset || !dataAsset) {
     return (
       <main style={{ paddingTop: "var(--nav-h, 5rem)" }}>
         <section className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -33,27 +32,40 @@ const DetailWorkGuest = () => {
   return (
     <main
       role="main"
-      aria-busy={isLoadingWork}
+      aria-busy={isLoadingAsset}
       style={{ paddingTop: "var(--nav-h, 5rem)" }}
     >
       <section className="mx-auto max-w-6xl px-4 sm:px-6">
         <header className="mb-6 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-[#006d63] sm:text-4xl">
-              {dataWork?.title}
+              {dataAsset?.title}
             </h1>
-            <p className="text-muted-foreground mt-1">
-              {dataWork?.description}
-            </p>
+            <p className="text-muted-foreground mt-1">lastest update</p>
             <small className="text-foreground">
-              {convertTime(`${dataWork?.dateFinished}`)}
+              {convertTime(`${dataAsset?.updated}`)}
             </small>
           </div>
         </header>
-        {hasVideo && <YouTubeEmbed url={dataWork.content} />}
+        <div className="relative aspect-video w-full">
+          <Image
+            src={dataAsset.thumbnail.url}
+            alt="thumbnail"
+            fill
+            className="aspect-video w-full"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Button
+            href={dataAsset.asset.url}
+            className="w-fit rounded-lg bg-[#006d63] px-6 py-3 text-sm font-semibold text-white"
+          >
+            Download Asset
+          </Button>
+        </div>
       </section>
     </main>
   );
 };
 
-export default DetailWorkGuest;
+export default DetailAssetGuest;

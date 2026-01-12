@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import workServices from "@/services/work.service";
+import workServices from "@/services/work.services";
 import { IWork } from "@/types/Work";
 
 interface WorkResponse {

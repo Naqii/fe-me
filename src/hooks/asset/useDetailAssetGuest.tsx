@@ -1,25 +1,25 @@
-import workServices from "@/services/work.service";
+import assetServices from "@/services/asset.services";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 
-const useDetailWorkGuest = () => {
+const useDetailAssetGuest = () => {
   const { query, isReady } = useRouter();
 
-  const getWorkById = async () => {
-    const { data } = await workServices.getWorkById(`${query.id}`);
+  const getAssetById = async () => {
+    const { data } = await assetServices.getAssetById(`${query.id}`);
     return data.data;
   };
 
-  const { data: dataWork, isLoading: isLoadingWork } = useQuery({
-    queryKey: ["Work", query.id],
-    queryFn: getWorkById,
+  const { data: dataAsset, isLoading: isLoadingAsset } = useQuery({
+    queryKey: ["Asset", query.id],
+    queryFn: getAssetById,
     enabled: isReady,
   });
 
   return {
-    dataWork,
-    isLoadingWork,
+    dataAsset,
+    isLoadingAsset,
   };
 };
 
-export default useDetailWorkGuest;
+export default useDetailAssetGuest;

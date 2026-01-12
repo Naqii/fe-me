@@ -1,5 +1,5 @@
 import { ToasterContext } from "@/contexts/ToasterContext";
-import workServices from "@/services/work.service";
+import workServices from "@/services/work.services";
 import { IWork } from "@/types/Work";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";

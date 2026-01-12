@@ -1,4 +1,4 @@
-import categoryServices from "@/services/category.service";
+import categoryServices from "@/services/category.services";
 import { toDateStandard } from "@/utils/date";
 import { DateValue } from "@heroui/react";
 import { yupResolver } from "@hookform/resolvers/yup";

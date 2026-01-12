@@ -1,5 +1,5 @@
 import useChangeUrl from "@/hooks/useChangeUrl";
-import workServices from "@/services/work.service";
+import workServices from "@/services/work.services";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useState } from "react";

@@ -1,12 +1,10 @@
+import CardAsset from "@/components/ui/CardAsset";
 import useAssetGuest from "@/hooks/asset/useAssetGuest";
 
 const AssetsPage = () => {
-  const { dataAsset, displayAsset, isLoadingAsset, refetchAssets } =
-    useAssetGuest();
+  const { assets, isLoadingAsset, isRefetchingAsset } = useAssetGuest();
 
-  const assets = dataAsset?.data || [];
-  const totalPages = dataAsset?.pagination?.totalPages ?? 1;
-  const loading = isLoadingAsset;
+  const loading = isLoadingAsset || isRefetchingAsset;
 
   return (
     <main
@@ -25,6 +23,13 @@ const AssetsPage = () => {
             </p>
           </div>
         </header>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {!loading && assets
+            ? assets.map((asset) => <CardAsset key={asset._id} asset={asset} />)
+            : Array.from({ length: 6 }).map((_, index) => (
+                <CardAsset key={`asset-skeleton-${index}`} isLoading />
+              ))}
+        </div>
       </section>
     </main>
   );

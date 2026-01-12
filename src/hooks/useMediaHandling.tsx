@@ -1,5 +1,5 @@
 import { ToasterContext } from "@/contexts/ToasterContext";
-import uploadServices from "@/services/upload.service";
+import uploadServices from "@/services/upload.services";
 import { IFile } from "@/types/File";
 import { useMutation } from "@tanstack/react-query";
 import { useContext } from "react";

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation } from "@tanstack/react-query";
 import { IWork } from "@/types/Work";
-import workServices from "@/services/work.service";
+import workServices from "@/services/work.services";
 import useMediaHandling from "../../useMediaHandling";
 import { toDateStandard } from "@/utils/date";
 import { DateValue } from "@heroui/react";
