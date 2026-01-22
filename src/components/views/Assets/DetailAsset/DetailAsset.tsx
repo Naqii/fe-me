@@ -4,7 +4,7 @@ import { Button } from "@heroui/react";
 import Image from "next/image";
 
 const DetailAssetGuest = () => {
-  const { dataAsset, isLoadingAsset } = useDetailAssetGuest();
+  const { dataAsset, isLoadingAsset, downloadAsset } = useDetailAssetGuest();
 
   if (isLoadingAsset || !dataAsset) {
     return (
@@ -57,7 +57,7 @@ const DetailAssetGuest = () => {
         </div>
         <div className="flex flex-col gap-2">
           <Button
-            href={dataAsset.asset.url}
+            onPress={downloadAsset}
             className="w-fit rounded-lg bg-[#006d63] px-6 py-3 text-sm font-semibold text-white"
           >
             Download Asset

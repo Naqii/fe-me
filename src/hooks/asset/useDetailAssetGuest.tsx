@@ -16,9 +16,34 @@ const useDetailAssetGuest = () => {
     enabled: isReady,
   });
 
+  const downloadAsset = async () => {
+    if (!query.id) return;
+
+    const response = await assetServices.getAssetArchiveById(`${query.id}`);
+
+    const blob = new Blob([response.data], {
+      type: response.headers["content-type"],
+    });
+
+    const url = window.URL.createObjectURL(blob);
+
+    const filename =
+      response.headers["content-disposition"]
+        ?.split("filename=")[1]
+        ?.replaceAll('"', "") || `${dataAsset?.asset?.publicId}.zip`;
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    link.click();
+
+    window.URL.revokeObjectURL(url);
+  };
+
   return {
     dataAsset,
     isLoadingAsset,
+    downloadAsset,
   };
 };
 
