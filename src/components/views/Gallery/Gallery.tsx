@@ -3,9 +3,10 @@ import useImageGuest from "@/hooks/image/useImageGuest";
 import { Spinner } from "@heroui/react";
 
 const GalleryPage = () => {
-  const { visibleImages, isLoadingImage, isRefetchingImage } = useImageGuest();
+  const { visibleImages, pagination, isLoadingImage, isRefetchingImage } =
+    useImageGuest();
 
-  const totalPages = visibleImages?.pagination?.totalPages ?? 1;
+  const totalPages = pagination?.totalPages ?? 1;
   const loading = isLoadingImage || isRefetchingImage;
 
   return (

@@ -56,10 +56,10 @@ const GalleryMasonry = (props: PropTypes) => {
 
   const BottomContent = useMemo(
     () => (
-      <div className="flex items-center justify-center lg:justify-between">
+      <div className="block lg:flex lg:items-center lg:justify-between">
         {showLimit && (
           <Select
-            className="hidden max-w-36 lg:block"
+            className="mb-2 max-w-36 lg:block"
             size="md"
             selectedKeys={[`${currentLimit}`]}
             selectionMode="single"

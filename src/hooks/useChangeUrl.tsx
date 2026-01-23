@@ -16,9 +16,9 @@ const useChangeUrl = () => {
   const currentStudent = router.query.student;
   const currentIsOnline = router.query.isOnline;
   const currentIsFeatured = router.query.isFeatured;
-  const currentClass = Array.isArray(router.query.className)
-    ? router.query.className[0]
-    : router.query.className || "68ad2af44b23429a397378bc";
+  // const currentClass = Array.isArray(router.query.className)
+  //   ? router.query.className[0]
+  //   : router.query.className || "68ad2af44b23429a397378bc";
 
   const currentmonth = router.query.month;
   const currentyear = router.query.year;
@@ -132,7 +132,7 @@ const useChangeUrl = () => {
     currentLimit,
     currentPage,
     currentSearch,
-    currentClass,
+    // currentClass,
     currentmonth,
     currentyear,
 

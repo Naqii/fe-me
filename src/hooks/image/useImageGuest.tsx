@@ -35,11 +35,16 @@ const useImageGuest = () => {
     enabled: router.isReady && !!currentPage && !!currentLimit,
   });
 
-  const visibleImages =
-    dataImage?.data?.filter((img: IImage) => normalizeIsShow(img.isShow)) ?? [];
+  const images = dataImage?.data ?? [];
+  const visibleImages = images.filter((img: IImage) =>
+    normalizeIsShow(img.isShow),
+  );
+
+  const pagination = dataImage?.pagination;
 
   return {
     visibleImages,
+    pagination,
     isLoadingImage,
     isRefetchingImage,
     refetchImages,
