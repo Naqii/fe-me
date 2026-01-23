@@ -1,4 +1,5 @@
 import assetServices from "@/services/asset.services";
+import categoryServices from "@/services/category.services";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 
@@ -14,6 +15,19 @@ const useDetailAssetGuest = () => {
     queryKey: ["Asset", query.id],
     queryFn: getAssetById,
     enabled: isReady,
+  });
+
+  const getCategoryById = async () => {
+    if (!dataAsset?.category) return null;
+
+    const { data } = await categoryServices.getCategoryById(dataAsset.category);
+    return data.data;
+  };
+
+  const { data: dataCategory } = useQuery({
+    queryKey: ["Category", dataAsset?.category],
+    queryFn: getCategoryById,
+    enabled: !!dataAsset?.category,
   });
 
   const downloadAsset = async () => {
@@ -44,6 +58,8 @@ const useDetailAssetGuest = () => {
     dataAsset,
     isLoadingAsset,
     downloadAsset,
+
+    dataCategory,
   };
 };
 
