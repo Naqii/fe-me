@@ -16,6 +16,10 @@ const NAV_ITEMS = [
     href: "/assets",
   },
   {
+    label: "Tools",
+    href: "/tools",
+  },
+  {
     label: "Contact",
     href: "/contact",
   },

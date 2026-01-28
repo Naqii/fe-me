@@ -5,6 +5,7 @@ const endpoint = {
   WORK: "/works",
   ASSET: "/assets",
   CATEGORY: "/category",
+  SHORTEN: "/shorten",
 };
 
 export default endpoint;
